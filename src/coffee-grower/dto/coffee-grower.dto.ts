@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { CoffeeGrowerEntity } from 'src/models/coffee-grower.entity';
+import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
 
 export class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Nome do cafeicultor',
+    description: 'Coffee grower name',
     example: 'Moises',
     required: true,
   })
@@ -15,7 +15,7 @@ export class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'Email do cafeicultor',
+    description: 'Coffee grower email',
     example: 'moises@teste.com.br',
     required: true,
   })
@@ -24,13 +24,9 @@ export class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsNotEmpty()
   @ApiProperty({
     type: String,
-    description: 'Senha de acesso do cafeicultor',
+    description: 'Coffee grower access password',
     example: '12345',
     required: true,
   })
   password: string;
-
-  id: string;
-  createDateTime: Date;
-  lastChangedDateTime: Date;
 }

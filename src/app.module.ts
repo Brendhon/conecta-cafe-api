@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FarmModule } from './farm/farm.module';
 import { CoffeeGrowerModule } from './coffee-grower/coffee-grower.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configService } from './config/config.service';
+import { configService } from './helpers/config/config.service';
 
 @Module({
   imports: [

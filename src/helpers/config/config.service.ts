@@ -7,7 +7,6 @@ class ConfigService {
   constructor(private env: { [k: string]: string | undefined }) {}
 
   private getValue(key: string, throwOnMissing = true): string {
-    console.log('Porta', process.env.PORT);
     const value = this.env[key];
     if (!value && throwOnMissing) {
       throw new Error(`config error - missing env.${key}`);
@@ -26,8 +25,7 @@ class ConfigService {
   }
 
   public isProduction() {
-    const mode = this.getValue('MODE', false);
-    return mode != 'DEV';
+    return this.getValue('IS_PROD', false);
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
@@ -39,16 +37,15 @@ class ConfigService {
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DATABASE'),
-
+      entities: ['dist/**/*.entity{.ts,.js}'],
       migrationsTableName: 'migrations_typeorm',
       synchronize: true,
       migrations: ['dist/database/migration/*{.ts,.js}'],
       cli: {
         migrationsDir: 'src/database/migration',
-        entitiesDir: 'src/models',
+        // entitiesDir: 'src/models',
       },
       migrationsRun: true,
-      autoLoadEntities: true,
     };
   }
 }

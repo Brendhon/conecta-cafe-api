@@ -1,4 +1,4 @@
-import { ResponseModel } from '../models/response.model';
+import { ResponseModel } from '../common/models/response.model';
 
 /**
  * @param data Dados a serem passados como resposta
@@ -14,7 +14,7 @@ export default function ResponseFactory(
   return {
     success: !error,
     status: status,
-    data: data,
+    data: error ? {} : data,
     error: error,
   };
 }

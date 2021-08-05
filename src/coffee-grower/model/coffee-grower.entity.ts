@@ -1,5 +1,5 @@
 import { Entity, Column, Unique } from 'typeorm';
-import { BaseEntity } from './base.entity';
+import { BaseEntity } from '../../helpers/common/models/base.entity';
 
 @Entity({ name: 'coffee_grower' })
 @Unique(['email'])

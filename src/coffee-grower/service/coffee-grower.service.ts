@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import ResponseFactory from 'src/factory/response-factory';
-import { CoffeeGrowerEntity } from 'src/models/coffee-grower.entity';
-import { ResponseModel } from 'src/models/response.model';
+import ResponseFactory from 'src/helpers/factory/response-factory';
+import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
+import { ResponseModel } from 'src/helpers/common/models/response.model';
 
 @Injectable()
 export class CoffeeGrowerService {
