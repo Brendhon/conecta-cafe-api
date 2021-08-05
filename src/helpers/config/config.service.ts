@@ -43,7 +43,6 @@ class ConfigService {
       migrations: ['dist/database/migration/*{.ts,.js}'],
       cli: {
         migrationsDir: 'src/database/migration',
-        // entitiesDir: 'src/models',
       },
       migrationsRun: true,
     };

@@ -6,15 +6,10 @@ import { ResponseModel } from '../common/models/response.model';
  * @param error Se existir enviar o erro
  * @returns ResponseModel
  */
-export default function ResponseFactory(
-  data: any,
-  status: number,
-  error?: any,
-): ResponseModel {
+export default function ResponseFactory(data: any, error?: any): ResponseModel {
   return {
     success: !error,
-    status: status,
-    data: error ? {} : data,
+    data: data,
     error: error,
   };
 }

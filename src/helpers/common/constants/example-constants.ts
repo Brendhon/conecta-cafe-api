@@ -1,6 +1,6 @@
 import { CoffeeGrowerEntity } from '../../../coffee-grower/model/coffee-grower.entity';
 
-export abstract class Constants {
+export abstract class ConstantsExample {
   static readonly COFFEE_GROWER_EXAMPLE: CoffeeGrowerEntity = {
     name: 'Moises',
     email: 'moises@teste.com.br',

@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './helpers/common/filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -11,6 +12,9 @@ async function bootstrap() {
 
   // Habilitando cors
   app.enableCors();
+
+  // // Usando filtro para mudar o objeto de resposta quando existe uma exceção
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // Adicionando validações
   app.useGlobalPipes(new ValidationPipe());
