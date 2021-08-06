@@ -1,33 +1,48 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
-import { ResponseModel } from '../../helpers/common/models/response.model';
-import ResponseFactory from '../../helpers/factory/response-factory';
 
 @Injectable()
 export class CoffeeGrowerService {
   constructor(
     @InjectRepository(CoffeeGrowerEntity)
-    private repository: Repository<CoffeeGrowerEntity>,
+    private repo: Repository<CoffeeGrowerEntity>,
   ) {}
 
-  getAll(): Promise<ResponseModel> {
-    return this.repository
-      .find()
-      .then((resp) => ResponseFactory(resp))
-      .catch((error) => {
-        throw new BadRequestException(error.detail);
-      });
+  async create(coffeeGrower: CoffeeGrowerEntity): Promise<CoffeeGrowerEntity> {
+    try {
+      return await this.repo.save(coffeeGrower);
+    } catch (error) {
+      throw new BadRequestException(error.driverError.detail);
+    }
   }
 
-  create(coffeeGrower: CoffeeGrowerEntity): Promise<ResponseModel> {
-    return this.repository
-      .save(coffeeGrower)
-      .then(() => ResponseFactory({ message: 'Create with success' }))
-      .catch((error) => {
-        throw new BadRequestException(error.detail);
-      });
+  async findAll(): Promise<CoffeeGrowerEntity[]> {
+    try {
+      return await this.repo.find();
+    } catch (error) {
+      throw new BadRequestException(error.driverError.detail);
+    }
+  }
+
+  async findOne(email: string): Promise<CoffeeGrowerEntity> {
+    try {
+      return await this.repo.findOne({ email: email });
+    } catch (error) {
+      throw new BadRequestException(error.driverError.detail);
+    }
+  }
+
+  async update(
+    email: string,
+    newCoffeeGrower: CoffeeGrowerEntity,
+  ): Promise<UpdateResult> {
+    try {
+      return await this.repo.update({ email: email }, newCoffeeGrower);
+    } catch (error) {
+      throw new BadRequestException(error.driverError.detail);
+    }
   }
 }

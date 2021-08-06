@@ -10,6 +10,6 @@ export default function ResponseFactory(data: any, error?: any): ResponseModel {
   return {
     success: !error,
     data: data,
-    error: error,
+    error: error ? error : {},
   };
 }

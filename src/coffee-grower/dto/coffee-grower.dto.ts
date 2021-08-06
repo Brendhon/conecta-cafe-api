@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
 
-export class CoffeeGrowerDTO implements CoffeeGrowerEntity {
+class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsString()
   @ApiProperty({
     type: String,
@@ -30,3 +30,11 @@ export class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   })
   password: string;
 }
+
+// Validações de param e query
+class GetOneParams {
+  @IsEmail()
+  email: string;
+}
+
+export { CoffeeGrowerDTO, GetOneParams };
