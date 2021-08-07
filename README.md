@@ -10,6 +10,8 @@
 
 ```
 
+<h3 align="center">🚧 Em Desenvolvimento 🚧</h3><br>
+
 Para documentação dos endpoints, acesse o Swagger em `api/doc`.
 
 ## ☕ Sobre o projeto
