@@ -53,7 +53,7 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 
 1. Clone o repositório
 ```bash
-$ git clone https://github.com/Brendhon/conecta-cafe-api.git
+git clone https://github.com/Brendhon/conecta-cafe-api.git
 ```
 
 2. Inicie o Banco de dados.
@@ -66,7 +66,7 @@ Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, 
 
 3. Instale as dependências
 ```bash
-$ npm install
+npm install
 ```
 
 4. Com isso o projeto já estará pronto para ser executado.
@@ -79,19 +79,17 @@ Observações:
 
 ### ⚽ Rodando o servidor
 
+Execute a aplicação em modo de desenvolvimento
+
 ```bash
-
-# Execute a aplicação em modo de desenvolvimento
-$ npm run start:dev
-
-# O servidor iniciará na porta:3000
-
+npm run start:dev
 ```
+O servidor iniciará em [localhost:3000](localhost:3000).
 
 ### 🤖 Rodando os testes automatizados
 
 ```bash
-$ npm run test
+npm run test
 ```
 
 ---
