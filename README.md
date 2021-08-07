@@ -1,7 +1,5 @@
 <h1 align="center">Conecta Café</h1>
 
----
-
 ```txt
    _____                                 _                _____            __        
   / ____|                               | |              / ____|          / _|       
@@ -99,21 +97,28 @@ $ npm run test
 ---
 
 ## 👥 Autores
-<div style="display: flex;">
 
-<a href="https://github.com/Brendhon" style="margin-right: 15px; text-align:center">
+<table  style="text-align:center; border: none" >
+<tr>
+<td align="center"> 
+<a href="https://github.com/Brendhon" style="text-align:center;">
 <img style="border-radius: 20%;" src="https://github.com/brendhon.png" width="120px;" alt="autor"/><br> <strong> Brendhon Moreira </strong>
 </a>
+</td>
 
-<a href="https://github.com/GabrielGSD" style="margin-right: 15px; text-align:center">
+<td align="center"> 
+<a href="https://github.com/GabrielGSD" style="text-align:center;">
 <img style="border-radius: 20%;" src="https://github.com/GabrielGSD.png" width="120px;" alt="autor"/><br><strong> Gabriel Daniel </strong>
 </a>
+</td>
 
-<a href="https://github.com/MoisesSDelmoro" styles="text-align:center">
+<td align="center"> 
+<a href="https://github.com/MoisesSDelmoro" styles="text-align:center;">
 <img style="border-radius: 20%;" src="https://github.com/MoisesSDelmoro.png" width="120px;" alt="autor"/><br><strong> Moises Delmoro </strong>
 </a>
-
-</div>
+</td>
+</tr>
+</table>
 
 ### Contato
 
