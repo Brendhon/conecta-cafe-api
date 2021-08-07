@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 
@@ -41,6 +41,13 @@ export class CoffeeGrowerService {
   ): Promise<UpdateResult> {
     try {
       return await this.repo.update({ email: email }, newCoffeeGrower);
+    } catch (error) {
+      throw new BadRequestException(error.driverError.detail);
+    }
+  }
+  async remove(email: string): Promise<DeleteResult> {
+    try {
+      return await this.repo.delete({ email: email });
     } catch (error) {
       throw new BadRequestException(error.driverError.detail);
     }

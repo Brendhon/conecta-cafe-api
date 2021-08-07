@@ -32,6 +32,24 @@ describe('Unity test - Coffee Grower', () => {
     jest.resetAllMocks();
   });
 
+  describe('Create', () => {
+    it('should create a coffee grower', async () => {
+      // Mock - Param, body, query and response
+      mockResp = ConstantsExample.MOCK_SERVICE_TO_CREATE_GROWERS;
+      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+
+      // Mock - function
+      jest.spyOn(service, 'create').mockResolvedValue(mockResp);
+
+      // Check - se sucesso é verdadeiro
+      expect(await controller.create(mockBody)).toMatchObject({
+        success: true,
+        data: mockResp,
+        error: {},
+      });
+    });
+  });
+
   describe('List', () => {
     it('should list all coffee grower', async () => {
       // Mock - Param, body, query and response
@@ -82,24 +100,6 @@ describe('Unity test - Coffee Grower', () => {
     });
   });
 
-  describe('Create', () => {
-    it('should create a coffee grower', async () => {
-      // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_CREATE_GROWERS;
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
-
-      // Mock - function
-      jest.spyOn(service, 'create').mockResolvedValue(mockResp);
-
-      // Check - se sucesso é verdadeiro
-      expect(await controller.create(mockBody)).toMatchObject({
-        success: true,
-        data: mockResp,
-        error: {},
-      });
-    });
-  });
-
   describe('Update', () => {
     it('should update a coffee grower', async () => {
       // Mock - Param, body, query and response
@@ -116,25 +116,61 @@ describe('Unity test - Coffee Grower', () => {
         error: {},
       });
     });
+
+    it('should throw NotFoundException if coffee grower not found', async () => {
+      // Mock - Param, body, query and response
+      mockResp = ConstantsExample.MOCK_SERVICE_TO_UPDATE_GROWERS;
+      mockResp.affected = 0;
+      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+
+      // Mock - function
+      jest.spyOn(service, 'update').mockResolvedValue(mockResp);
+
+      // check - Se o controller lançou um erro de 'Not found'
+      await controller
+        .update(mockParams, mockBody)
+        .then((resp) => {
+          expect(resp).toBe(undefined);
+        })
+        .catch((error) => {
+          expect(error.status).toBe(404);
+        });
+    });
   });
 
-  it('should throw NotFoundException if coffee grower not found', async () => {
-    // Mock - Param, body, query and response
-    mockResp = ConstantsExample.MOCK_SERVICE_TO_UPDATE_GROWERS;
-    mockResp.affected = 0;
-    mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+  describe('Remove', () => {
+    it('should delete a coffee grower', async () => {
+      // Mock - Param, body, query and response
+      mockResp = ConstantsExample.MOCK_SERVICE_TO_DELETE_GROWERS;
 
-    // Mock - function
-    jest.spyOn(service, 'update').mockResolvedValue(mockResp);
+      // Mock - function
+      jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
 
-    // check - Se o controller lançou um erro de 'Not found'
-    await controller
-      .update(mockParams, mockBody)
-      .then((resp) => {
-        expect(resp).toBe(undefined);
-      })
-      .catch((error) => {
-        expect(error.status).toBe(404);
+      // Check - se sucesso é verdadeiro
+      expect(await controller.remove(mockParams)).toMatchObject({
+        success: true,
+        data: { message: 'Deleted with success' },
+        error: {},
       });
+    });
+
+    it('should throw NotFoundException if coffee grower not found', async () => {
+      // Mock - Param, body, query and response
+      mockResp = ConstantsExample.MOCK_SERVICE_TO_DELETE_GROWERS;
+      mockResp.affected = 0;
+
+      // Mock - function
+      jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
+
+      // check - Se o controller lançou um erro de 'Not found'
+      await controller
+        .remove(mockParams)
+        .then((resp) => {
+          expect(resp).toBe(undefined);
+        })
+        .catch((error) => {
+          expect(error.status).toBe(404);
+        });
+    });
   });
 });

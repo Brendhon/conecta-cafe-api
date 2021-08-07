@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -10,6 +11,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -49,6 +51,7 @@ export class CoffeeGrowerController {
     example: 'moises@teste.com.br',
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
+  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: GetOneParams) {
     this.resp = await this.coffeeGrowerService.findOne(params.email);
@@ -63,10 +66,26 @@ export class CoffeeGrowerController {
     example: 'moises@teste.com.br',
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
+  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(@Param() params: GetOneParams, @Body() body: CoffeeGrowerDTO) {
     this.resp = await this.coffeeGrowerService.update(params.email, body);
     if (!this.resp.affected) throw new NotFoundException();
     else return ResponseFactory({ message: 'Updated with success' });
+  }
+
+  @Delete(':email')
+  @ApiParam({
+    name: 'email',
+    description: 'Coffee grower email',
+    example: 'moises@teste.com.br',
+  })
+  @ApiOkResponse({ description: 'coffee grower removed with success' })
+  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
+  @ApiBadRequestResponse({ description: 'Invalid or missing data' })
+  async remove(@Param() params: GetOneParams) {
+    this.resp = await this.coffeeGrowerService.remove(params.email);
+    if (!this.resp.affected) throw new NotFoundException();
+    return ResponseFactory({ message: 'Deleted with success' });
   }
 }

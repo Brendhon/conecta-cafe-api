@@ -1,5 +1,5 @@
 import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 export abstract class ConstantsExample {
   static readonly MOCK_BODY_COFFEE_GROWER: CoffeeGrowerEntity = {
@@ -15,6 +15,11 @@ export abstract class ConstantsExample {
   static readonly MOCK_SERVICE_TO_UPDATE_GROWERS: UpdateResult = {
     affected: 1,
     generatedMaps: [],
+    raw: [],
+  };
+
+  static readonly MOCK_SERVICE_TO_DELETE_GROWERS: DeleteResult = {
+    affected: 1,
     raw: [],
   };
 
