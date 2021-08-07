@@ -1,73 +1,128 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+<h1 align="center">Conecta Café</h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+```txt
+   _____                                 _                _____            __        
+  / ____|                               | |              / ____|          / _|       
+ | |        ___    _ __     ___    ___  | |_    __ _    | |        __ _  | |_    ___ 
+ | |       / _ \  | '_ \   / _ \  / __| | __|  / _` |   | |       / _` | |  _|  / _ \
+ | |____  | (_) | | | | | |  __/ | (__  | |_  | (_| |   | |____  | (_| | | |   |  __/
+  \_____|  \___/  |_| |_|  \___|  \___|  \__|  \__,_|    \_____|  \__,_| |_|    \___|
 
-## Description
+```
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Para documentação dos endpoints, acesse o Swagger em `api/doc`.
 
-## Installation
+## ☕ Sobre o projeto
 
+- **[🤖 API](https://github.com/Brendhon/conecta-cafe-api)**
+
+API Rest do projeto **Conecta Café**, criada para o trabalho de conclusão de curso (TCC) do curso de Engenharia de computação do [Instituto Nacional de Telecomunicações (INATEL)](https://inatel.br/home/).
+
+---
+
+## 💻 Tecnologias
+
+As seguintes tecnologias foram utilizadas na construção do projeto:
+
+ - **[NestJS](https://nestjs.com/)**
+ - **[TypeORM](https://typeorm.io/#/)**
+ - **[Docker](https://www.docker.com/)**
+ - **[PostgreSQL](https://www.postgresql.org/)**
+ - **[Class Validator](https://github.com/typestack/class-validator)**
+ - **[Jest](https://jestjs.io/)**
+ - **[SuperTest](https://github.com/visionmedia/supertest)**
+ - **[Cross-env](https://github.com/kentcdodds/cross-env)**
+ - **[Dotenv](https://github.com/motdotla/dotenv)**
+ - **[ESlint](https://eslint.org/)**
+ - **[Swagger](https://swagger.io/)**
+> Veja o arquivo  **[package.json](https://github.com/Brendhon/conecta-cafe-api/blob/main/package.json)**
+
+### Utilitários
+- Editor:  **[Visual Studio Code](https://code.visualstudio.com/)**
+- Teste de API:  **[Insomnia](https://insomnia.rest/)**
+
+---
+
+## 👨‍💻 Como executar o projeto
+
+### 💡 Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+**[Git](https://git-scm.com)**, **[Node.js](https://nodejs.org/en/)** e **[Docker](https://www.docker.com/)**.<br> 
+
+
+1. Clone o repositório
+```bash
+$ git clone https://github.com/Brendhon/conecta-cafe-api.git
+```
+
+2. Inicie o Banco de dados.
+
+Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, vamos utilizar uma imagem Docker. Foi criado um script `start-db.sh` para automatizar o processo, execute-o com o comando:
+
+  ```bash
+  npm run start:db
+  ```
+
+3. Instale as dependências
 ```bash
 $ npm install
 ```
 
-## Running the app
+4. Com isso o projeto já estará pronto para ser executado.
+
+Observações:
+* Foi criado um script para apagar o container do postgres no docker, utilize o comando:
+  ```bash
+  npm run delete:db
+  ```
+
+### ⚽ Rodando o servidor
 
 ```bash
-# development
-$ npm run start
 
-# watch mode
+# Execute a aplicação em modo de desenvolvimento
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
+# O servidor iniciará na porta:3000
+
 ```
 
-## Test
+### 🤖 Rodando os testes automatizados
 
 ```bash
-# unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 👥 Autores
+<div style="display: flex;">
 
-## Stay in touch
+<a href="https://github.com/Brendhon" style="margin-right: 15px; text-align:center">
+<img style="border-radius: 20%;" src="https://github.com/brendhon.png" width="120px;" alt="autor"/><br> <strong> Brendhon Moreira </strong>
+</a>
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+<a href="https://github.com/GabrielGSD" style="margin-right: 15px; text-align:center">
+<img style="border-radius: 20%;" src="https://github.com/GabrielGSD.png" width="120px;" alt="autor"/><br><strong> Gabriel Daniel </strong>
+</a>
 
-## License
+<a href="https://github.com/MoisesSDelmoro" styles="text-align:center">
+<img style="border-radius: 20%;" src="https://github.com/MoisesSDelmoro.png" width="120px;" alt="autor"/><br><strong> Moises Delmoro </strong>
+</a>
 
-Nest is [MIT licensed](LICENSE).
+</div>
+
+### Contato
+
+[![Linkedin Badge](https://img.shields.io/badge/-Brendhon-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/brendhon-moreira)](https://www.linkedin.com/in/brendhon-moreira)
+[![Linkedin Badge](https://img.shields.io/badge/-Gabriel-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gabriel-souza-b1995b216/)](https://www.linkedin.com/in/gabriel-souza-b1995b216/)
+[![Linkedin Badge](https://img.shields.io/badge/-Moises-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/moises-s-delmoro-8747651ba/)](https://www.linkedin.com/in/moises-s-delmoro-8747651ba/)
+
+---
+## 📝 License
+[![License](https://img.shields.io/apm/l/vim-mode?color=blue)](http://badges.mit-license.org)
+
+- **[MIT license](https://choosealicense.com/licenses/mit/)**
