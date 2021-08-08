@@ -54,10 +54,10 @@ git clone https://github.com/Brendhon/conecta-cafe-api.git
 
 2. Inicie o Banco de dados.
 
-Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, vamos utilizar uma imagem Docker. Foi criado um script `start-db.sh` para automatizar o processo, execute-o com o comando:
+Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, vamos utilizar uma imagem Docker. Foi criado um script `create-db.sh` para automatizar o processo, execute-o com o comando:
 
   ```bash
-  npm run start:db
+  npm run create:db
   ```
 
 3. Instale as dependências
@@ -71,6 +71,10 @@ Observações:
 * Foi criado um script para apagar o container do postgres no docker, utilize o comando:
   ```bash
   npm run delete:db
+  ```
+* Caso já possua a imagem docker (conecta_cafe_server) criada, é possível iniciar o container com o comando:
+  ```bash
+  npm run start:db
   ```
 
 ### ⚽ Rodando o servidor

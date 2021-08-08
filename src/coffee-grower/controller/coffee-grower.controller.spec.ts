@@ -22,9 +22,6 @@ describe('Unity test - Coffee Grower', () => {
 
     controller = module.get<CoffeeGrowerController>(CoffeeGrowerController);
     service = module.get<CoffeeGrowerService>(CoffeeGrowerService);
-  });
-
-  beforeEach(() => {
     mockParams = { email: '' };
   });
 
@@ -50,7 +47,7 @@ describe('Unity test - Coffee Grower', () => {
     });
   });
 
-  describe('List', () => {
+  describe('Find All', () => {
     it('should list all coffee grower', async () => {
       // Mock - Param, body, query and response
       mockResp = ConstantsExample.MOCK_SERVICE_TO_FIND_ALL_GROWERS;
@@ -65,7 +62,9 @@ describe('Unity test - Coffee Grower', () => {
         error: {},
       });
     });
+  });
 
+  describe('Find One', () => {
     it('should list a coffee grower', async () => {
       // Mock - Param, body, query and response
       mockResp = ConstantsExample.MOCK_SERVICE_TO_FIND_ONE_GROWERS;
