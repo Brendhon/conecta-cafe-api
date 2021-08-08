@@ -24,20 +24,14 @@ API Rest do projeto **Conecta Café**, criada para o trabalho de conclusão de c
 
 ## 💻 Tecnologias
 
-As seguintes tecnologias foram utilizadas na construção do projeto:
+As principais tecnologias utilizadas na construção do projeto:
 
  - **[NestJS](https://nestjs.com/)**
  - **[TypeORM](https://typeorm.io/#/)**
  - **[Docker](https://www.docker.com/)**
  - **[PostgreSQL](https://www.postgresql.org/)**
- - **[Class Validator](https://github.com/typestack/class-validator)**
  - **[Jest](https://jestjs.io/)**
- - **[SuperTest](https://github.com/visionmedia/supertest)**
- - **[Cross-env](https://github.com/kentcdodds/cross-env)**
- - **[Dotenv](https://github.com/motdotla/dotenv)**
- - **[ESlint](https://eslint.org/)**
- - **[Swagger](https://swagger.io/)**
-> Veja o arquivo  **[package.json](https://github.com/Brendhon/conecta-cafe-api/blob/main/package.json)**
+> Obtenha mais detalhes no arquivo **[package.json](https://github.com/Brendhon/conecta-cafe-api/blob/main/package.json)**
 
 ### Utilitários
 - Editor:  **[Visual Studio Code](https://code.visualstudio.com/)**
