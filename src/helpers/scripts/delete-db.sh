@@ -1,24 +1,32 @@
 # Setando as variaveis de ambiente
 set -e
 
-# Variaveis
-SERVER="conecta_cafe_server";
-
-# Variavel para achar currenty SO
-UNAME=$(uname)
-
 # Cores
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
 
-# Removendo instancia antiga da imagem e iniciando uma nova
-echo "echo stop & remove old docker [$SERVER]"
+# Variaveis
+SERVER="conecta_cafe_server";
+SUCCESS_MESSAGE="${green}Deleted with success${reset}";
+FAILURE_MESSAGE="${red}Container not found${reset}";
+COMMAND="";
+UNAME=$(uname) # Variavel para descobrir qual o Sistema Operacional utilizado
+
+# Mudando o comando dependendo do SO
 case $UNAME in
-  MINGW64*)
-    (docker kill $SERVER || :) && (docker rm $SERVER || echo "\n${red}Container not found${reset}\n")
+  MINGW*)
+    COMMAND="(docker kill $SERVER) && (docker rm $SERVER)"
     ;;
   *) 
-    (sudo docker kill $SERVER || :) && (sudo docker rm $SERVER || echo "\n${red}Container not found${reset}\n")
+    COMMAND="(sudo docker kill $SERVER) && (sudo docker rm $SERVER)"
     ;;
 esac
+
+# Removendo instancia antiga da imagem e iniciando uma nova
+echo "echo stop & remove old docker [$SERVER]"
+if eval $COMMAND ; then
+  echo $SUCCESS_MESSAGE
+else
+  echo $FAILURE_MESSAGE
+fi
