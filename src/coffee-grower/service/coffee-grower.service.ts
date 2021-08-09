@@ -15,7 +15,9 @@ export class CoffeeGrowerService {
     try {
       return await this.repo.save(coffeeGrower);
     } catch (error) {
-      throw new BadRequestException('Invalid or missing data');
+      throw new BadRequestException(
+        'Invalid, missing data or Coffee Grower already exist',
+      );
     }
   }
 
