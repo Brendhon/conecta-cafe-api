@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ConstantsExample } from '../../helpers/common/constants/example-constants';
+import { MockCoffeeGrower } from '../../helpers/mock/coffee-grower.mock';
 import {
   MockType,
   repositoryMockFactory,
-} from '../../helpers/common/mock/repository.mock';
+} from '../../helpers/mock/repository.mock';
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 import { CoffeeGrowerService } from './coffee-grower.service';
 
@@ -43,8 +43,8 @@ describe('CoffeeGrowerService', () => {
   describe('Create', () => {
     it('should create a coffee grower ', async () => {
       // Mock - Atributos
-      mockResp = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+      mockResp = MockCoffeeGrower.BODY;
+      mockBody = MockCoffeeGrower.BODY;
 
       // Mock - Repositório
       repository.save.mockReturnValue(mockResp);
@@ -74,7 +74,7 @@ describe('CoffeeGrowerService', () => {
   describe('Find One', () => {
     it('should return a coffee grower ', async () => {
       // Mock - Atributos
-      mockResp = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+      mockResp = MockCoffeeGrower.BODY;
 
       // Mock - Repositório
       repository.findOne.mockReturnValue(mockResp);
@@ -104,7 +104,7 @@ describe('CoffeeGrowerService', () => {
   describe('Find All', () => {
     it('should return all coffee grower ', async () => {
       // Mock - Atributos
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_FIND_ALL_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_FIND_ALL;
 
       // Mock - Repositório
       repository.find.mockReturnValue(mockResp);
@@ -134,8 +134,8 @@ describe('CoffeeGrowerService', () => {
   describe('Update', () => {
     it('should updated a coffee grower ', async () => {
       // Mock - Atributos
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_UPDATE_GROWERS;
+      mockBody = MockCoffeeGrower.BODY;
+      mockResp = MockCoffeeGrower.SERVICE_TO_UPDATE;
 
       // Mock - Repositório
       repository.update.mockReturnValue(mockResp);
@@ -167,8 +167,8 @@ describe('CoffeeGrowerService', () => {
   describe('Delete', () => {
     it('should updated a coffee grower ', async () => {
       // Mock - Atributos
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_DELETE_GROWERS;
+      mockBody = MockCoffeeGrower.BODY;
+      mockResp = MockCoffeeGrower.SERVICE_TO_DELETE;
 
       // Mock - Repositório
       repository.delete.mockReturnValue(mockResp);

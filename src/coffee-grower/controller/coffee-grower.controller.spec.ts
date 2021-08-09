@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConstantsExample } from '../../helpers/common/constants/example-constants';
+import { MockCoffeeGrower } from '../../helpers/mock/coffee-grower.mock';
 import { GetOneParams } from '../dto/coffee-grower.dto';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
 import { CoffeeGrowerController } from './coffee-grower.controller';
@@ -32,8 +32,8 @@ describe('Unity test - Coffee Grower', () => {
   describe('Create', () => {
     it('should create a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_CREATE_GROWERS;
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+      mockResp = MockCoffeeGrower.SERVICE_TO_CREATE;
+      mockBody = MockCoffeeGrower.BODY;
 
       // Mock - function
       jest.spyOn(service, 'create').mockResolvedValue(mockResp);
@@ -50,7 +50,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Find All', () => {
     it('should list all coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_FIND_ALL_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_FIND_ALL;
 
       // Mock - function
       jest.spyOn(service, 'findAll').mockResolvedValue(mockResp);
@@ -67,7 +67,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Find One', () => {
     it('should list a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_FIND_ONE_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_FIND_ONE;
 
       // Mock - function
       jest.spyOn(service, 'findOne').mockResolvedValue(mockResp);
@@ -102,8 +102,8 @@ describe('Unity test - Coffee Grower', () => {
   describe('Update', () => {
     it('should update a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_UPDATE_GROWERS;
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+      mockResp = MockCoffeeGrower.SERVICE_TO_UPDATE;
+      mockBody = MockCoffeeGrower.BODY;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
@@ -118,9 +118,9 @@ describe('Unity test - Coffee Grower', () => {
 
     it('should throw NotFoundException if coffee grower not found', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_UPDATE_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_UPDATE;
       mockResp.affected = 0;
-      mockBody = ConstantsExample.MOCK_BODY_COFFEE_GROWER;
+      mockBody = MockCoffeeGrower.BODY;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
@@ -140,7 +140,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Remove', () => {
     it('should delete a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_DELETE_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_DELETE;
 
       // Mock - function
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
@@ -155,7 +155,7 @@ describe('Unity test - Coffee Grower', () => {
 
     it('should throw NotFoundException if coffee grower not found', async () => {
       // Mock - Param, body, query and response
-      mockResp = ConstantsExample.MOCK_SERVICE_TO_DELETE_GROWERS;
+      mockResp = MockCoffeeGrower.SERVICE_TO_DELETE;
       mockResp.affected = 0;
 
       // Mock - function

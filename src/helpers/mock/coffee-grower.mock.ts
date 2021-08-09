@@ -1,29 +1,29 @@
 import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-export abstract class ConstantsExample {
-  static readonly MOCK_BODY_COFFEE_GROWER: CoffeeGrowerEntity = {
+export abstract class MockCoffeeGrower {
+  static readonly BODY: CoffeeGrowerEntity = {
     name: 'Moises',
     email: 'moises@teste.com.br',
     password: '1245',
   };
 
-  static readonly MOCK_SERVICE_TO_CREATE_GROWERS = {
+  static readonly SERVICE_TO_CREATE = {
     message: 'Create with success',
   };
 
-  static readonly MOCK_SERVICE_TO_UPDATE_GROWERS: UpdateResult = {
+  static readonly SERVICE_TO_UPDATE: UpdateResult = {
     affected: 1,
     generatedMaps: [],
     raw: [],
   };
 
-  static readonly MOCK_SERVICE_TO_DELETE_GROWERS: DeleteResult = {
+  static readonly SERVICE_TO_DELETE: DeleteResult = {
     affected: 1,
     raw: [],
   };
 
-  static readonly MOCK_SERVICE_TO_FIND_ALL_GROWERS = [
+  static readonly SERVICE_TO_FIND_ALL = [
     {
       id: 'b9280405-8312-4bc6-beb9-041898aa85a0',
       createDateTime: '2021-08-06T17:23:02.905Z',
@@ -50,7 +50,7 @@ export abstract class ConstantsExample {
     },
   ];
 
-  static readonly MOCK_SERVICE_TO_FIND_ONE_GROWERS: CoffeeGrowerEntity = {
+  static readonly SERVICE_TO_FIND_ONE: CoffeeGrowerEntity = {
     name: 'Moises',
     email: 'moises@teste.com.br',
     password: '12345',
