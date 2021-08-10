@@ -31,7 +31,10 @@ export class CoffeeGrowerService {
 
   async findOne(email: string): Promise<CoffeeGrowerEntity> {
     try {
-      return await this.repo.findOne({ email: email });
+      return await this.repo.findOne(
+        { email: email },
+        { relations: ['farm', 'farm.address', 'farm.contact'] },
+      );
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }

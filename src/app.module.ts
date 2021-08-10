@@ -13,12 +13,10 @@ import { configService } from './helpers/config/config.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-    }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    FarmModule,
+    ConfigModule.forRoot(),
     CoffeeGrowerModule,
+    FarmModule,
   ],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {

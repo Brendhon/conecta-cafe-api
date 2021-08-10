@@ -30,7 +30,9 @@ class FarmEntity extends BaseEntity {
   @OneToOne(() => ContactEntity, (contact) => contact.farm, { cascade: true })
   contact: ContactDTO;
 
-  @ManyToOne(() => CoffeeGrowerEntity, (grower) => grower.farm)
+  @ManyToOne(() => CoffeeGrowerEntity, (grower) => grower.farm, {
+    nullable: false,
+  })
   coffeeGrower: CoffeeGrowerDTO;
 }
 

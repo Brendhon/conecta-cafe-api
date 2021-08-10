@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CoffeeGrowerDTO } from 'src/coffee-grower/dto/coffee-grower.dto';
 import { Repository } from 'typeorm';
 import { FarmEntity } from '../model/farm.entity';
 
@@ -10,8 +11,12 @@ export class FarmService {
     private repo: Repository<FarmEntity>,
   ) {}
 
-  async create(farm: FarmEntity): Promise<FarmEntity> {
+  async create(
+    farm: FarmEntity,
+    responsibleGrower: CoffeeGrowerDTO,
+  ): Promise<FarmEntity> {
     try {
+      farm.coffeeGrower = responsibleGrower;
       return await this.repo.save(farm);
     } catch (error) {
       console.log(error);

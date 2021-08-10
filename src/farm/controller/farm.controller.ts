@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -16,11 +16,11 @@ export class FarmController {
 
   constructor(private farmService: FarmService) {}
 
-  @Post()
+  @Post(':id')
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async create(@Body() body: FarmDTO) {
-    this.resp = await this.farmService.create(body);
+  async create(@Body() body: FarmDTO, @Param() params) {
+    this.resp = await this.farmService.create(body, params.id);
     return ResponseFactory({ message: 'Create with success' });
   }
 
