@@ -3,6 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { FarmService } from '../service/farm.service';
@@ -17,6 +18,11 @@ export class FarmController {
   constructor(private farmService: FarmService) {}
 
   @Post(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'Coffee grower id',
+    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  })
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async create(@Body() body: FarmDTO, @Param() params: GetOneParams) {
