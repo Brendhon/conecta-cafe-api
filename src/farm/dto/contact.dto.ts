@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsPhoneNumber, IsString } from 'class-validator';
 import { ContactEntity } from '../model/contact.entity';
+import { FarmEntity } from '../model/farm.entity';
 
 export class ContactDTO implements ContactEntity {
-  id: number;
+  farm: FarmEntity;
+  id: string;
 
   @IsString()
   @IsPhoneNumber()

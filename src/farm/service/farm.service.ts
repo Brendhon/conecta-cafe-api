@@ -14,6 +14,7 @@ export class FarmService {
     try {
       return await this.repo.save(farm);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Invalid or missing data');
     }
   }
@@ -22,6 +23,7 @@ export class FarmService {
     try {
       return await this.repo.find({ relations: ['address', 'contact'] });
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Invalid or missing data');
     }
   }

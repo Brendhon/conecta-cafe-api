@@ -4,8 +4,11 @@ import { FarmEntity } from '../model/farm.entity';
 import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
 import { ContactDTO } from './contact.dto';
+import { CoffeeGrowerDTO } from 'src/coffee-grower/dto/coffee-grower.dto';
 
 class FarmDTO implements FarmEntity {
+  coffeeGrower: CoffeeGrowerDTO;
+
   @IsString()
   @ApiProperty({
     type: String,
@@ -41,21 +44,22 @@ class FarmDTO implements FarmEntity {
   })
   history: string;
 
-  @IsString()
+  @IsArray()
   @ApiProperty({
-    type: String,
+    isArray: true,
+    type: [String],
     description: 'Insecticides',
-    example: `Natural`,
+    example: ['Natural'],
   })
-  insecticides: string;
+  insecticides: string[];
 
-  @IsString()
+  @IsArray()
   @ApiProperty({
-    type: String,
+    type: [String],
     description: 'Fertilizers',
-    example: `Organic`,
+    example: ['Organic'],
   })
-  fertilizers: string;
+  fertilizers: string[];
 }
 
 export { FarmDTO };

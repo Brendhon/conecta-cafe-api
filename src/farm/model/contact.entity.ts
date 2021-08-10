@@ -1,9 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { FarmDTO } from '../dto/farm.dto';
+import { FarmEntity } from './farm.entity';
 
 @Entity({ name: 'contact' })
 export class ContactEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   phone: string;
@@ -25,4 +27,8 @@ export class ContactEntity {
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   twitter: string;
+
+  @OneToOne(() => FarmEntity, (farm) => farm.contact)
+  @JoinColumn({ name: 'id' })
+  farm: FarmDTO;
 }

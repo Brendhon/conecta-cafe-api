@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Matches } from 'class-validator';
 import { Constants } from 'src/helpers/common/constants/constants';
 import { AddressEntity } from '../model/address.entity';
-import { FarmEntity } from '../model/farm.entity';
+import { FarmDTO } from './farm.dto';
 
 export class AddressDTO implements AddressEntity {
-  id: number;
+  id: string;
 
   @IsString()
   @ApiProperty({
@@ -44,5 +44,5 @@ export class AddressDTO implements AddressEntity {
   })
   uf: string;
 
-  farm: FarmEntity;
+  farm: FarmDTO;
 }

@@ -36,7 +36,7 @@ export class CoffeeGrowerController {
     return ResponseFactory({ message: 'Create with success' });
   }
 
-  @Get('info')
+  @Get()
   @ApiOkResponse({ description: 'Return all coffee grower' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {
@@ -44,7 +44,7 @@ export class CoffeeGrowerController {
     return ResponseFactory(this.resp);
   }
 
-  @Get('info/:email')
+  @Get(':email')
   @ApiParam({
     name: 'email',
     description: 'Coffee grower email',

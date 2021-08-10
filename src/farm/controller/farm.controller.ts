@@ -24,7 +24,7 @@ export class FarmController {
     return ResponseFactory({ message: 'Create with success' });
   }
 
-  @Get('info')
+  @Get()
   @ApiOkResponse({ description: 'Return all data' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {

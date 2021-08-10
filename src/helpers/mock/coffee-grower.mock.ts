@@ -6,6 +6,7 @@ export abstract class MockCoffeeGrower {
     name: 'Moises',
     email: 'moises@teste.com.br',
     password: '1245',
+    farm: [],
   };
 
   static readonly SERVICE_TO_CREATE = {
@@ -54,5 +55,6 @@ export abstract class MockCoffeeGrower {
     name: 'Moises',
     email: 'moises@teste.com.br',
     password: '12345',
+    farm: [],
   };
 }
