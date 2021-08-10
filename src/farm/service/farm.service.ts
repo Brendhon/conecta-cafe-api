@@ -20,7 +20,7 @@ export class FarmService {
 
   async findAll(): Promise<FarmEntity[]> {
     try {
-      return await this.repo.find({ relations: ['address'] });
+      return await this.repo.find({ relations: ['address', 'contact'] });
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }
