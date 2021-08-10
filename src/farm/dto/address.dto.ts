@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Matches } from 'class-validator';
-import { Constants } from 'src/helpers/common/constants/constants';
+import { Constants } from '../../helpers/common/constants/constants';
 import { AddressEntity } from '../model/address.entity';
 import { FarmDTO } from './farm.dto';
 

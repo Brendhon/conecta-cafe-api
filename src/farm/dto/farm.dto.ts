@@ -4,7 +4,7 @@ import { FarmEntity } from '../model/farm.entity';
 import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
 import { ContactDTO } from './contact.dto';
-import { CoffeeGrowerDTO } from 'src/coffee-grower/dto/coffee-grower.dto';
+import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
 
 class FarmDTO implements FarmEntity {
   coffeeGrower: CoffeeGrowerDTO;
@@ -62,4 +62,10 @@ class FarmDTO implements FarmEntity {
   fertilizers: string[];
 }
 
-export { FarmDTO };
+// Validações de param e query
+class GetOneParams {
+  @IsNotEmpty({ message: 'It is necessary to pass the coffee grower ID' })
+  id: CoffeeGrowerDTO;
+}
+
+export { FarmDTO, GetOneParams };

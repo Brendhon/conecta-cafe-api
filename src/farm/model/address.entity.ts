@@ -19,7 +19,10 @@ export class AddressEntity {
   @Column({ type: 'varchar', length: 300 })
   uf: string;
 
-  @ManyToOne(() => FarmEntity, (farm) => farm.address)
+  @ManyToOne(() => FarmEntity, (farm) => farm.address, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'id' })
   farm: FarmDTO;
 }

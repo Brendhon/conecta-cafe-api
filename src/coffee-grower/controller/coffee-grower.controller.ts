@@ -33,7 +33,10 @@ export class CoffeeGrowerController {
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async create(@Body() body: CoffeeGrowerDTO) {
     this.resp = await this.coffeeGrowerService.create(body);
-    return ResponseFactory({ message: 'Create with success' });
+    return ResponseFactory({
+      id: this.resp.id,
+      message: 'Create with success',
+    });
   }
 
   @Get()
@@ -44,47 +47,47 @@ export class CoffeeGrowerController {
     return ResponseFactory(this.resp);
   }
 
-  @Get(':email')
+  @Get(':id')
   @ApiParam({
-    name: 'email',
-    description: 'Coffee grower email',
-    example: 'moises@teste.com.br',
+    name: 'id',
+    description: 'Coffee grower id',
+    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: GetOneParams) {
-    this.resp = await this.coffeeGrowerService.findOne(params.email);
+    this.resp = await this.coffeeGrowerService.findOne(params.id);
     if (!this.resp) throw new NotFoundException('Coffee grower not found');
     else return ResponseFactory(this.resp);
   }
 
-  @Put(':email')
+  @Put(':id')
   @ApiParam({
-    name: 'email',
-    description: 'Coffee grower email',
-    example: 'moises@teste.com.br',
+    name: 'id',
+    description: 'Coffee grower id',
+    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(@Param() params: GetOneParams, @Body() body: CoffeeGrowerDTO) {
-    this.resp = await this.coffeeGrowerService.update(params.email, body);
+    this.resp = await this.coffeeGrowerService.update(params.id, body);
     if (!this.resp.affected) throw new NotFoundException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
 
-  @Delete(':email')
+  @Delete(':id')
   @ApiParam({
-    name: 'email',
-    description: 'Coffee grower email',
-    example: 'moises@teste.com.br',
+    name: 'id',
+    description: 'Coffee grower id',
+    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiOkResponse({ description: 'coffee grower removed with success' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async remove(@Param() params: GetOneParams) {
-    this.resp = await this.coffeeGrowerService.remove(params.email);
+    this.resp = await this.coffeeGrowerService.remove(params.id);
     if (!this.resp.affected) throw new NotFoundException();
     return ResponseFactory({ message: 'Deleted with success' });
   }

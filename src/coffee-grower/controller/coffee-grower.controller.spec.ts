@@ -22,7 +22,7 @@ describe('Unity test - Coffee Grower', () => {
 
     controller = module.get<CoffeeGrowerController>(CoffeeGrowerController);
     service = module.get<CoffeeGrowerService>(CoffeeGrowerService);
-    mockParams = { email: '' };
+    mockParams = { id: '' };
   });
 
   afterEach(() => {

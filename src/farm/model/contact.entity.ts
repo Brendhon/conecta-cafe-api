@@ -28,7 +28,10 @@ export class ContactEntity {
   @Column({ type: 'varchar', length: 300, nullable: true })
   twitter: string;
 
-  @OneToOne(() => FarmEntity, (farm) => farm.contact)
+  @OneToOne(() => FarmEntity, (farm) => farm.contact, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'id' })
   farm: FarmDTO;
 }

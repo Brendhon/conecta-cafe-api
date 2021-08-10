@@ -7,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { FarmService } from '../service/farm.service';
 import ResponseFactory from '../../helpers/factory/response-factory';
-import { FarmDTO } from '../dto/farm.dto';
+import { FarmDTO, GetOneParams } from '../dto/farm.dto';
 
 @ApiTags('Farm')
 @Controller('farm')
@@ -19,7 +19,7 @@ export class FarmController {
   @Post(':id')
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async create(@Body() body: FarmDTO, @Param() params) {
+  async create(@Body() body: FarmDTO, @Param() params: GetOneParams) {
     this.resp = await this.farmService.create(body, params.id);
     return ResponseFactory({ message: 'Create with success' });
   }

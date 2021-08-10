@@ -1,4 +1,4 @@
-import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
+import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 export abstract class MockCoffeeGrower {

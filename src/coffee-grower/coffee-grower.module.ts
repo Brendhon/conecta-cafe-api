@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
+import { CoffeeGrowerEntity } from '../coffee-grower/model/coffee-grower.entity';
 import { CoffeeGrowerController } from './controller/coffee-grower.controller';
 import { CoffeeGrowerService } from './service/coffee-grower.service';
 

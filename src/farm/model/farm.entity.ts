@@ -1,6 +1,6 @@
-import { CoffeeGrowerDTO } from 'src/coffee-grower/dto/coffee-grower.dto';
-import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
-import { BaseEntity } from 'src/helpers/common/models/base.entity';
+import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
+import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
+import { BaseEntity } from '../../helpers/common/models/base.entity';
 import { Entity, Column, OneToMany, OneToOne, ManyToOne } from 'typeorm';
 import { AddressDTO } from '../dto/address.dto';
 import { ContactDTO } from '../dto/contact.dto';
@@ -32,6 +32,9 @@ class FarmEntity extends BaseEntity {
 
   @ManyToOne(() => CoffeeGrowerEntity, (grower) => grower.farm, {
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   coffeeGrower: CoffeeGrowerDTO;
 }

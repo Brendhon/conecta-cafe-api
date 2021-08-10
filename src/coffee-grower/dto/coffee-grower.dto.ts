@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
-import { FarmDTO } from 'src/farm/dto/farm.dto';
+import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
+import { FarmDTO } from '../../farm/dto/farm.dto';
 
 class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsString()
@@ -36,8 +36,8 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
 
 // Validações de param e query
 class GetOneParams {
-  @IsEmail()
-  email: string;
+  @IsNotEmpty()
+  id: string;
 }
 
 export { CoffeeGrowerDTO, GetOneParams };

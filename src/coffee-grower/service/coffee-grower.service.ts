@@ -29,10 +29,10 @@ export class CoffeeGrowerService {
     }
   }
 
-  async findOne(email: string): Promise<CoffeeGrowerEntity> {
+  async findOne(id: string): Promise<CoffeeGrowerEntity> {
     try {
       return await this.repo.findOne(
-        { email: email },
+        { id },
         { relations: ['farm', 'farm.address', 'farm.contact'] },
       );
     } catch (error) {
@@ -41,18 +41,18 @@ export class CoffeeGrowerService {
   }
 
   async update(
-    email: string,
+    id: string,
     newCoffeeGrower: CoffeeGrowerEntity,
   ): Promise<UpdateResult> {
     try {
-      return await this.repo.update({ email: email }, newCoffeeGrower);
+      return await this.repo.update({ id }, newCoffeeGrower);
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }
   }
-  async remove(email: string): Promise<DeleteResult> {
+  async remove(id: string): Promise<DeleteResult> {
     try {
-      return await this.repo.delete({ email: email });
+      return await this.repo.delete({ id });
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }

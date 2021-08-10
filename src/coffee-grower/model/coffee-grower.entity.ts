@@ -14,6 +14,6 @@ export class CoffeeGrowerEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   password: string;
 
-  @OneToMany(() => FarmEntity, (farm) => farm.coffeeGrower, { cascade: true })
+  @OneToMany(() => FarmEntity, (farm) => farm.coffeeGrower)
   farm: FarmDTO[];
 }
