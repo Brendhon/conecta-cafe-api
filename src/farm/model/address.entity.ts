@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+
 import { FarmDTO } from '../dto/farm.dto';
 import { FarmEntity } from './farm.entity';
 
@@ -19,7 +20,7 @@ export class AddressEntity {
   @Column({ type: 'varchar', length: 300 })
   uf: string;
 
-  @ManyToOne(() => FarmEntity, (farm) => farm.address, {
+  @OneToOne(() => FarmEntity, (farm) => farm.contact, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

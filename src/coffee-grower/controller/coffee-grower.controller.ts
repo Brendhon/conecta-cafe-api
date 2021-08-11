@@ -68,7 +68,7 @@ export class CoffeeGrowerController {
     description: 'Coffee grower id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
-  @ApiOkResponse({ description: 'Return a specific coffee grower' })
+  @ApiOkResponse({ description: 'Updated with success' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(@Param() params: GetOneParams, @Body() body: CoffeeGrowerDTO) {

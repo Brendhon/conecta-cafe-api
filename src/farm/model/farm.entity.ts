@@ -1,7 +1,7 @@
 import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
 import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
 import { BaseEntity } from '../../helpers/common/models/base.entity';
-import { Entity, Column, OneToMany, OneToOne, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
 import { AddressDTO } from '../dto/address.dto';
 import { ContactDTO } from '../dto/contact.dto';
 import { AddressEntity } from './address.entity';
@@ -24,8 +24,8 @@ class FarmEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 300, array: true })
   fertilizers: string[];
 
-  @OneToMany(() => AddressEntity, (address) => address.farm, { cascade: true })
-  address: AddressDTO[];
+  @OneToOne(() => AddressEntity, (address) => address.farm, { cascade: true })
+  address: AddressDTO;
 
   @OneToOne(() => ContactEntity, (contact) => contact.farm, { cascade: true })
   contact: ContactDTO;
@@ -36,7 +36,11 @@ class FarmEntity extends BaseEntity {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
+  @JoinColumn({ name: 'coffeeGrowerId' })
   coffeeGrower: CoffeeGrowerDTO;
+
+  @Column('uuid')
+  public coffeeGrowerId: string;
 }
 
 export { FarmEntity };

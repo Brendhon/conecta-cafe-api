@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsDefined,
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { FarmEntity } from '../model/farm.entity';
 import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
@@ -7,6 +13,7 @@ import { ContactDTO } from './contact.dto';
 import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
 
 class FarmDTO implements FarmEntity {
+  coffeeGrowerId: string;
   coffeeGrower: CoffeeGrowerDTO;
 
   @IsString()
@@ -18,11 +25,11 @@ class FarmDTO implements FarmEntity {
   })
   farm_name: string;
 
-  @IsArray()
+  @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => AddressDTO)
-  @ApiProperty({ type: [AddressDTO] })
-  address: AddressDTO[];
+  @ApiProperty({ type: AddressDTO })
+  address: AddressDTO;
 
   @IsNotEmpty()
   @ValidateNested()
@@ -62,10 +69,14 @@ class FarmDTO implements FarmEntity {
   fertilizers: string[];
 }
 
-// Validações de param e query
+// Validações de param, header e query
 class GetOneParams {
   @IsNotEmpty({ message: 'It is necessary to pass the coffee grower ID' })
-  id: CoffeeGrowerDTO;
+  id: string;
+}
+class AuthorizationHeaders {
+  @IsDefined()
+  authorization: CoffeeGrowerDTO;
 }
 
-export { FarmDTO, GetOneParams };
+export { FarmDTO, GetOneParams, AuthorizationHeaders };
