@@ -2,13 +2,16 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { FarmEntity } from '../model/farm.entity';
 
 @Injectable()
 export class FarmService {
+  private readonly logger = new Logger(FarmService.name);
+
   constructor(
     @InjectRepository(FarmEntity)
     private repo: Repository<FarmEntity>,
@@ -63,16 +66,37 @@ export class FarmService {
       // Salvando os dados
       return await this.repo.save(getFarmFromDB);
     } catch (error) {
-      throw error;
+      switch (error.status) {
+        case 403:
+          throw new ForbiddenException();
+        default:
+          this.logger.error(error.message);
+          throw new BadRequestException('Invalid or missing data');
+      }
     }
   }
-  /**
-  async remove(id: string): Promise<DeleteResult> {
+
+  async remove(id: string, auth: string): Promise<DeleteResult> {
     try {
+      // Pegando os dados atuais da fazenda
+      const getFarmFromDB = await this.findOne(id);
+
+      // Verificando se a fazenda existe
+      if (!getFarmFromDB) return new DeleteResult();
+
+      // Verificando se a fazenda pertence ao cafeicultor responsável
+      if (getFarmFromDB.coffeeGrowerId !== auth) throw new ForbiddenException();
+
+      // Deletando do banco
       return await this.repo.delete({ id });
     } catch (error) {
-      throw new BadRequestException('Invalid or missing data');
+      switch (error.status) {
+        case 403:
+          throw new ForbiddenException();
+        default:
+          this.logger.error(error.message);
+          throw new BadRequestException('Invalid or missing data');
+      }
     }
   }
-  */
 }

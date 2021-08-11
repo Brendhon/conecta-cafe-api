@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -33,7 +34,6 @@ export class FarmController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
@@ -72,7 +72,6 @@ export class FarmController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiParam({
     name: 'id',
@@ -96,18 +95,25 @@ export class FarmController {
     else return ResponseFactory({ message: 'Updated with success' });
   }
 
-  /* @Delete()
+  @Delete(':id')
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Farm id',
+    example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
   @ApiOkResponse({ description: 'Removed with success' })
   @ApiNotFoundResponse({ description: 'Farm not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(@Param() params: GetOneParams) {
-    this.resp = await this.farmService.remove(params.email);
+  async remove(
+    @RequestHeader(HeaderDTO) headers: HeaderDTO,
+    @Param() params: GetOneParams,
+  ) {
+    this.resp = await this.farmService.remove(params.id, headers.authorization);
     if (!this.resp.affected) throw new NotFoundException();
     return ResponseFactory({ message: 'Deleted with success' });
-  } */
+  }
 }
