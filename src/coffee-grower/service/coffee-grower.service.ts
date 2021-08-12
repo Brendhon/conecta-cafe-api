@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
@@ -6,6 +6,7 @@ import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 
 @Injectable()
 export class CoffeeGrowerService {
+  private readonly logger = new Logger(CoffeeGrowerService.name);
   constructor(
     @InjectRepository(CoffeeGrowerEntity)
     private repo: Repository<CoffeeGrowerEntity>,
@@ -25,6 +26,7 @@ export class CoffeeGrowerService {
     try {
       return await this.repo.find();
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
@@ -36,6 +38,7 @@ export class CoffeeGrowerService {
         { relations: ['farm', 'farm.address', 'farm.contact'] },
       );
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
@@ -47,6 +50,7 @@ export class CoffeeGrowerService {
     try {
       return await this.repo.update({ id }, newCoffeeGrower);
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
@@ -54,6 +58,7 @@ export class CoffeeGrowerService {
     try {
       return await this.repo.delete({ id });
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }

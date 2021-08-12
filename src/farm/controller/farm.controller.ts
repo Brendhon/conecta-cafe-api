@@ -114,6 +114,6 @@ export class FarmController {
   ) {
     this.resp = await this.farmService.remove(params.id, headers.authorization);
     if (!this.resp.affected) throw new NotFoundException();
-    return ResponseFactory({ message: 'Deleted with success' });
+    else return ResponseFactory({ message: 'Deleted with success' });
   }
 }
