@@ -20,8 +20,8 @@ import {
 import { FarmService } from '../service/farm.service';
 import ResponseFactory from '../../helpers/factory/response-factory';
 import { FarmDTO, GetOneParams } from '../dto/farm.dto';
-import { RequestHeader } from 'src/helpers/common/validators/request-header.validator';
 import { HeaderDTO } from '../dto/headers.dto';
+import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
 
 @ApiTags('Farm')
 @Controller('farm')
