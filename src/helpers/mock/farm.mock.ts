@@ -1,6 +1,6 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { FarmEntity } from '../../farm/model/farm.entity';
-import { HeaderDTO } from '../../farm/dto/headers.dto';
+import { HeaderDTO } from '../common/dto/headers.dto';
 
 export abstract class MockFarm {
   static readonly BODY: FarmEntity = new FarmEntity();

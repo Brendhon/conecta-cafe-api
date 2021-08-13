@@ -1,11 +1,20 @@
 import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
 import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
 import { BaseEntity } from '../../helpers/common/models/base.entity';
-import { Entity, Column, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { AddressDTO } from '../dto/address.dto';
 import { ContactDTO } from '../dto/contact.dto';
 import { AddressEntity } from './address.entity';
 import { ContactEntity } from './contact.entity';
+import { CoffeeDTO } from 'src/coffee/dto/coffee.dto';
+import { CoffeeEntity } from 'src/coffee/model/coffee.entity';
 
 @Entity({ name: 'farm' })
 class FarmEntity extends BaseEntity {
@@ -29,6 +38,9 @@ class FarmEntity extends BaseEntity {
 
   @OneToOne(() => ContactEntity, (contact) => contact.farm, { cascade: true })
   contact: ContactDTO;
+
+  @OneToMany(() => CoffeeEntity, (coffee) => coffee.farm, { cascade: true })
+  coffee: CoffeeDTO[];
 
   @ManyToOne(() => CoffeeGrowerEntity, (grower) => grower.farm, {
     nullable: false,

@@ -23,7 +23,9 @@ export class FarmService {
 
   async findAll(): Promise<FarmEntity[]> {
     try {
-      return await this.repo.find({ relations: ['address', 'contact'] });
+      return await this.repo.find({
+        relations: ['address', 'contact', 'coffee'],
+      });
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }
@@ -33,7 +35,7 @@ export class FarmService {
     try {
       return await this.repo.findOne(
         { id },
-        { relations: ['address', 'contact'] },
+        { relations: ['address', 'contact', 'coffee', 'coffee.special'] },
       );
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');

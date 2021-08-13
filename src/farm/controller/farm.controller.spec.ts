@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FarmController } from './farm.controller';
 import { FarmService } from '../service/farm.service';
-import { HeaderDTO } from '../dto/headers.dto';
-import { GetOneParams } from '../dto/farm.dto';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { MockFarm } from '../../helpers/mock/farm.mock';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 
 // Realizando o mock do serviço
 jest.mock('../service/farm.service');
@@ -11,7 +11,7 @@ jest.mock('../service/farm.service');
 describe('FarmController', () => {
   let controller: FarmController;
   let service: FarmService;
-  let mockParams: GetOneParams;
+  let mockParams: ParamsDTO;
   let mockHeaders: HeaderDTO;
   let mockBody: any;
   let mockResp: any;

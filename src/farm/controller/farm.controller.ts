@@ -19,9 +19,10 @@ import {
 } from '@nestjs/swagger';
 import { FarmService } from '../service/farm.service';
 import ResponseFactory from '../../helpers/factory/response-factory';
-import { FarmDTO, GetOneParams } from '../dto/farm.dto';
-import { HeaderDTO } from '../dto/headers.dto';
+import { FarmDTO } from '../dto/farm.dto';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 
 @ApiTags('Farm')
 @Controller('farm')
@@ -42,7 +43,10 @@ export class FarmController {
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
     this.resp = await this.farmService.create(body, headers.authorization);
-    return ResponseFactory({ message: 'Create with success' });
+    return ResponseFactory({
+      id: this.resp.id,
+      message: 'Create with success',
+    });
   }
 
   @Get()
@@ -62,7 +66,7 @@ export class FarmController {
   @ApiOkResponse({ description: 'Return a specific farm' })
   @ApiNotFoundResponse({ description: 'Farm not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async findOne(@Param() params: GetOneParams) {
+  async findOne(@Param() params: ParamsDTO) {
     this.resp = await this.farmService.findOne(params.id);
     if (!this.resp) throw new NotFoundException('Farm not found');
     else return ResponseFactory(this.resp);
@@ -83,7 +87,7 @@ export class FarmController {
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
-    @Param() params: GetOneParams,
+    @Param() params: ParamsDTO,
     @Body() body: FarmDTO,
   ) {
     this.resp = await this.farmService.update(
@@ -110,7 +114,7 @@ export class FarmController {
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async remove(
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
-    @Param() params: GetOneParams,
+    @Param() params: ParamsDTO,
   ) {
     this.resp = await this.farmService.remove(params.id, headers.authorization);
     if (!this.resp.affected) throw new NotFoundException();

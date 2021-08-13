@@ -16,9 +16,10 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import ResponseFactory from '../../helpers/factory/response-factory';
 
-import { CoffeeGrowerDTO, GetOneParams } from '../dto/coffee-grower.dto';
+import { CoffeeGrowerDTO } from '../dto/coffee-grower.dto';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
 
 @ApiTags('Coffee grower')
@@ -56,7 +57,7 @@ export class CoffeeGrowerController {
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async findOne(@Param() params: GetOneParams) {
+  async findOne(@Param() params: ParamsDTO) {
     this.resp = await this.coffeeGrowerService.findOne(params.id);
     if (!this.resp) throw new NotFoundException('Coffee grower not found');
     else return ResponseFactory(this.resp);
@@ -71,7 +72,7 @@ export class CoffeeGrowerController {
   @ApiOkResponse({ description: 'Updated with success' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async update(@Param() params: GetOneParams, @Body() body: CoffeeGrowerDTO) {
+  async update(@Param() params: ParamsDTO, @Body() body: CoffeeGrowerDTO) {
     this.resp = await this.coffeeGrowerService.update(params.id, body);
     if (!this.resp.affected) throw new NotFoundException();
     else return ResponseFactory({ message: 'Updated with success' });
@@ -86,7 +87,7 @@ export class CoffeeGrowerController {
   @ApiOkResponse({ description: 'coffee grower removed with success' })
   @ApiNotFoundResponse({ description: 'Coffee grower not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(@Param() params: GetOneParams) {
+  async remove(@Param() params: ParamsDTO) {
     this.resp = await this.coffeeGrowerService.remove(params.id);
     if (!this.resp.affected) throw new NotFoundException();
     return ResponseFactory({ message: 'Deleted with success' });

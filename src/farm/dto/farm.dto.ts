@@ -1,16 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsDefined,
-  IsNotEmpty,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { FarmEntity } from '../model/farm.entity';
 import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
 import { ContactDTO } from './contact.dto';
 import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
+import { CoffeeDTO } from 'src/coffee/dto/coffee.dto';
 
 class FarmDTO implements FarmEntity {
   coffeeGrowerId: string;
@@ -67,16 +62,8 @@ class FarmDTO implements FarmEntity {
     example: ['Organic'],
   })
   fertilizers: string[];
+
+  coffee: CoffeeDTO[];
 }
 
-// Validações de param, header e query
-class GetOneParams {
-  @IsNotEmpty({ message: 'It is necessary to pass the coffee grower ID' })
-  id: string;
-}
-class AuthorizationHeaders {
-  @IsDefined()
-  authorization: CoffeeGrowerDTO;
-}
-
-export { FarmDTO, GetOneParams, AuthorizationHeaders };
+export { FarmDTO };

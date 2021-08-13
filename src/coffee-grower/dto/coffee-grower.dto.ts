@@ -34,10 +34,4 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   farm: FarmDTO[];
 }
 
-// Validações de param e query
-class GetOneParams {
-  @IsNotEmpty()
-  id: string;
-}
-
-export { CoffeeGrowerDTO, GetOneParams };
+export { CoffeeGrowerDTO };

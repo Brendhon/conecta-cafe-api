@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { MockCoffeeGrower } from '../../helpers/mock/coffee-grower.mock';
-import { GetOneParams } from '../dto/coffee-grower.dto';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
 import { CoffeeGrowerController } from './coffee-grower.controller';
 
@@ -10,7 +10,7 @@ jest.mock('../service/coffee-grower.service');
 describe('Unity test - Coffee Grower', () => {
   let controller: CoffeeGrowerController;
   let service: CoffeeGrowerService;
-  let mockParams: GetOneParams;
+  let mockParams: ParamsDTO;
   let mockBody: any;
   let mockResp: any;
 
