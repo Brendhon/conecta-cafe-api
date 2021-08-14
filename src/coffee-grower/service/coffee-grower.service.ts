@@ -54,6 +54,7 @@ export class CoffeeGrowerService {
       throw new BadRequestException('Invalid or missing data');
     }
   }
+
   async remove(id: string): Promise<DeleteResult> {
     try {
       return await this.repo.delete({ id });
