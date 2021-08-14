@@ -27,6 +27,7 @@ export class FarmService {
         relations: ['address', 'contact', 'coffee'],
       });
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
@@ -38,6 +39,7 @@ export class FarmService {
         { relations: ['address', 'contact', 'coffee', 'coffee.special'] },
       );
     } catch (error) {
+      this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }

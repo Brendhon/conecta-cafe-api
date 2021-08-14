@@ -1,5 +1,6 @@
 import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { HeaderDTO } from '../common/dto/headers.dto';
 
 export abstract class MockCoffeeGrower {
   static readonly BODY: CoffeeGrowerEntity = {
@@ -11,6 +12,10 @@ export abstract class MockCoffeeGrower {
 
   static readonly SERVICE_TO_CREATE = {
     message: 'Create with success',
+  };
+
+  static readonly HEADERS: HeaderDTO = {
+    authorization: '',
   };
 
   static readonly SERVICE_TO_UPDATE: UpdateResult = {

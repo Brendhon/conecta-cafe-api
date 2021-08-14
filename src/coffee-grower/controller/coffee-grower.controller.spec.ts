@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { MockCoffeeGrower } from '../../helpers/mock/coffee-grower.mock';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
@@ -11,6 +12,7 @@ describe('Unity test - Coffee Grower', () => {
   let controller: CoffeeGrowerController;
   let service: CoffeeGrowerService;
   let mockParams: ParamsDTO;
+  let mockHeaders: HeaderDTO;
   let mockBody: any;
   let mockResp: any;
 
@@ -23,6 +25,7 @@ describe('Unity test - Coffee Grower', () => {
     controller = module.get<CoffeeGrowerController>(CoffeeGrowerController);
     service = module.get<CoffeeGrowerService>(CoffeeGrowerService);
     mockParams = { id: '' };
+    mockHeaders = MockCoffeeGrower.HEADERS;
   });
 
   afterEach(() => {
@@ -32,7 +35,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Create', () => {
     it('should create a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_CREATE;
+      mockResp = MockCoffeeGrower.BODY;
       mockBody = MockCoffeeGrower.BODY;
 
       // Mock - function
@@ -109,7 +112,7 @@ describe('Unity test - Coffee Grower', () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
 
       // Check - se sucesso é verdadeiro
-      expect(await controller.update(mockParams, mockBody)).toMatchObject({
+      expect(await controller.update(mockHeaders, mockBody)).toMatchObject({
         success: true,
         data: { message: 'Updated with success' },
         error: {},
@@ -127,12 +130,12 @@ describe('Unity test - Coffee Grower', () => {
 
       // check - Se o controller lançou um erro de 'Not found'
       await controller
-        .update(mockParams, mockBody)
+        .update(mockHeaders, mockBody)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
         .catch((error) => {
-          expect(error.status).toBe(404);
+          expect(error.status).toBe(403);
         });
     });
   });
@@ -146,7 +149,7 @@ describe('Unity test - Coffee Grower', () => {
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
 
       // Check - se sucesso é verdadeiro
-      expect(await controller.remove(mockParams)).toMatchObject({
+      expect(await controller.remove(mockHeaders)).toMatchObject({
         success: true,
         data: { message: 'Deleted with success' },
         error: {},
@@ -163,12 +166,12 @@ describe('Unity test - Coffee Grower', () => {
 
       // check - Se o controller lançou um erro de 'Not found'
       await controller
-        .remove(mockParams)
+        .remove(mockHeaders)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
         .catch((error) => {
-          expect(error.status).toBe(404);
+          expect(error.status).toBe(403);
         });
     });
   });

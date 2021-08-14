@@ -18,8 +18,7 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
     createQueryBuilder: jest.fn(() => ({
       delete: jest.fn().mockReturnThis(),
       from: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      andWhereInIds: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
       execute: jest.fn().mockReturnValue(MockFarm.SERVICE_TO_DELETE),
     })),
   }),

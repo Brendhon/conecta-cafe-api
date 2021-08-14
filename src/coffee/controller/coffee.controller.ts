@@ -12,6 +12,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -41,8 +42,10 @@ export class CoffeeController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiCreatedResponse({ description: 'Created with success' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async create(
     @Body() body: CoffeeDTO,
@@ -55,7 +58,7 @@ export class CoffeeController {
       headers.authorization,
     );
     if (!this.resp) throw new ForbiddenException();
-    return ResponseFactory({ message: 'Create with success' });
+    return ResponseFactory(this.resp);
   }
 
   @Get()
@@ -84,15 +87,16 @@ export class CoffeeController {
   @Put(':id')
   @ApiParam({
     name: 'id',
-    description: 'coffee id',
+    description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiOkResponse({ description: 'Updated with success' })
-  @ApiNotFoundResponse({ description: 'Coffee not found' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(
     @Param() params: ParamsDTO,
@@ -117,9 +121,10 @@ export class CoffeeController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiOkResponse({ description: 'Removed with success' })
-  @ApiNotFoundResponse({ description: 'Coffee not found' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async remove(
     @Param() params: ParamsDTO,

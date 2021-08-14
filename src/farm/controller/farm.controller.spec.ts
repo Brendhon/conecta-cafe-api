@@ -34,7 +34,7 @@ describe('FarmController', () => {
   describe('Create', () => {
     it('should create a farm', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_CREATE;
+      mockResp = MockFarm.BODY;
       mockBody = MockFarm.BODY;
       mockHeaders = MockFarm.HEADERS;
 
@@ -120,7 +120,7 @@ describe('FarmController', () => {
       });
     });
 
-    it('should throw NotFoundException if coffee grower not found', async () => {
+    it('should throw ForbiddenException', async () => {
       // Mock - Param, body, query and response
       mockResp = undefined;
       mockBody = MockFarm.BODY;
@@ -135,7 +135,7 @@ describe('FarmController', () => {
           expect(resp).toBe(undefined);
         })
         .catch((error) => {
-          expect(error.status).toBe(404);
+          expect(error.status).toBe(403);
         });
     });
   });
@@ -156,7 +156,7 @@ describe('FarmController', () => {
       });
     });
 
-    it('should throw NotFoundException if coffee grower not found', async () => {
+    it('should throw ForbiddenException', async () => {
       // Mock - Param, body, query and response
       mockResp = MockFarm.SERVICE_TO_DELETE;
       mockResp.affected = 0;
@@ -171,7 +171,7 @@ describe('FarmController', () => {
           expect(resp).toBe(undefined);
         })
         .catch((error) => {
-          expect(error.status).toBe(404);
+          expect(error.status).toBe(403);
         });
     });
   });

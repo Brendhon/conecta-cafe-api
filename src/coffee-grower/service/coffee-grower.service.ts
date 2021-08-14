@@ -24,7 +24,9 @@ export class CoffeeGrowerService {
 
   async findAll(): Promise<CoffeeGrowerEntity[]> {
     try {
-      return await this.repo.find();
+      return await this.repo.find({
+        relations: ['farm', 'farm.address', 'farm.contact'],
+      });
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');

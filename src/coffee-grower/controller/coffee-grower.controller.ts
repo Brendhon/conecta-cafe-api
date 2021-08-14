@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -11,11 +12,15 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
+import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import ResponseFactory from '../../helpers/factory/response-factory';
 
@@ -27,24 +32,21 @@ import { CoffeeGrowerService } from '../service/coffee-grower.service';
 export class CoffeeGrowerController {
   private resp: any;
 
-  constructor(private coffeeGrowerService: CoffeeGrowerService) {}
+  constructor(private service: CoffeeGrowerService) {}
 
   @Post()
-  @ApiCreatedResponse({ description: 'Created coffee grower' })
+  @ApiCreatedResponse({ description: 'Create with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async create(@Body() body: CoffeeGrowerDTO) {
-    this.resp = await this.coffeeGrowerService.create(body);
-    return ResponseFactory({
-      id: this.resp.id,
-      message: 'Create with success',
-    });
+    this.resp = await this.service.create(body);
+    return ResponseFactory(this.resp);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Return all coffee grower' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {
-    this.resp = await this.coffeeGrowerService.findAll();
+    this.resp = await this.service.findAll();
     return ResponseFactory(this.resp);
   }
 
@@ -55,41 +57,44 @@ export class CoffeeGrowerController {
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
-  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.coffeeGrowerService.findOne(params.id);
-    if (!this.resp) throw new NotFoundException('Coffee grower not found');
+    this.resp = await this.service.findOne(params.id);
+    if (!this.resp) throw new NotFoundException();
     else return ResponseFactory(this.resp);
   }
 
-  @Put(':id')
-  @ApiParam({
-    name: 'id',
-    description: 'Coffee grower id',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  @Put()
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Authorization token',
+    required: true,
   })
   @ApiOkResponse({ description: 'Updated with success' })
-  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async update(@Param() params: ParamsDTO, @Body() body: CoffeeGrowerDTO) {
-    this.resp = await this.coffeeGrowerService.update(params.id, body);
-    if (!this.resp.affected) throw new NotFoundException();
+  async update(
+    @RequestHeader(HeaderDTO) headers: HeaderDTO,
+    @Body() body: CoffeeGrowerDTO,
+  ) {
+    this.resp = await this.service.update(headers.authorization, body);
+    if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
 
-  @Delete(':id')
-  @ApiParam({
-    name: 'id',
-    description: 'Coffee grower id',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  @Delete()
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Authorization token',
+    required: true,
   })
-  @ApiOkResponse({ description: 'coffee grower removed with success' })
-  @ApiNotFoundResponse({ description: 'Coffee grower not found' })
+  @ApiOkResponse({ description: 'Removed with success' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(@Param() params: ParamsDTO) {
-    this.resp = await this.coffeeGrowerService.remove(params.id);
-    if (!this.resp.affected) throw new NotFoundException();
+  async remove(@RequestHeader(HeaderDTO) headers: HeaderDTO) {
+    this.resp = await this.service.remove(headers.authorization);
+    if (!this.resp.affected) throw new ForbiddenException();
     return ResponseFactory({ message: 'Deleted with success' });
   }
 }

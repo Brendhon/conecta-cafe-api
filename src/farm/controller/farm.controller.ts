@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -11,6 +12,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -29,12 +31,13 @@ import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 export class FarmController {
   private resp: any;
 
-  constructor(private farmService: FarmService) {}
+  constructor(private service: FarmService) {}
 
   @Post()
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
@@ -42,18 +45,15 @@ export class FarmController {
     @Body() body: FarmDTO,
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
-    this.resp = await this.farmService.create(body, headers.authorization);
-    return ResponseFactory({
-      id: this.resp.id,
-      message: 'Create with success',
-    });
+    this.resp = await this.service.create(body, headers.authorization);
+    return ResponseFactory(this.resp);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Return all data' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {
-    this.resp = await this.farmService.findAll();
+    this.resp = await this.service.findAll();
     return ResponseFactory(this.resp);
   }
 
@@ -67,8 +67,8 @@ export class FarmController {
   @ApiNotFoundResponse({ description: 'Farm not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.farmService.findOne(params.id);
-    if (!this.resp) throw new NotFoundException('Farm not found');
+    this.resp = await this.service.findOne(params.id);
+    if (!this.resp) throw new NotFoundException();
     else return ResponseFactory(this.resp);
   }
 
@@ -76,6 +76,7 @@ export class FarmController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiParam({
     name: 'id',
@@ -83,19 +84,19 @@ export class FarmController {
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
   @ApiOkResponse({ description: 'Updated with success' })
-  @ApiNotFoundResponse({ description: 'Farm not found' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
     @Param() params: ParamsDTO,
     @Body() body: FarmDTO,
   ) {
-    this.resp = await this.farmService.update(
+    this.resp = await this.service.update(
       params.id,
       body,
       headers.authorization,
     );
-    if (!this.resp) throw new NotFoundException();
+    if (!this.resp) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
 
@@ -103,6 +104,7 @@ export class FarmController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Authorization token',
+    required: true,
   })
   @ApiParam({
     name: 'id',
@@ -110,14 +112,14 @@ export class FarmController {
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
   @ApiOkResponse({ description: 'Removed with success' })
-  @ApiNotFoundResponse({ description: 'Farm not found' })
+  @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async remove(
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
     @Param() params: ParamsDTO,
   ) {
-    this.resp = await this.farmService.remove(params.id, headers.authorization);
-    if (!this.resp.affected) throw new NotFoundException();
+    this.resp = await this.service.remove(params.id, headers.authorization);
+    if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Deleted with success' });
   }
 }

@@ -9,10 +9,6 @@ export abstract class MockFarm {
     authorization: '',
   };
 
-  static readonly SERVICE_TO_CREATE = {
-    message: 'Create with success',
-  };
-
   static readonly SERVICE_TO_UPDATE: UpdateResult = {
     affected: 1,
     generatedMaps: [],
