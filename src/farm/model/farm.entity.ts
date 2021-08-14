@@ -13,8 +13,8 @@ import { AddressDTO } from '../dto/address.dto';
 import { ContactDTO } from '../dto/contact.dto';
 import { AddressEntity } from './address.entity';
 import { ContactEntity } from './contact.entity';
-import { CoffeeDTO } from 'src/coffee/dto/coffee.dto';
-import { CoffeeEntity } from 'src/coffee/model/coffee.entity';
+import { CoffeeDTO } from '../../coffee/dto/coffee.dto';
+import { CoffeeEntity } from '../../coffee/model/coffee.entity';
 
 @Entity({ name: 'farm' })
 class FarmEntity extends BaseEntity {

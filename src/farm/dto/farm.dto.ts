@@ -5,7 +5,7 @@ import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
 import { ContactDTO } from './contact.dto';
 import { CoffeeGrowerDTO } from '../../coffee-grower/dto/coffee-grower.dto';
-import { CoffeeDTO } from 'src/coffee/dto/coffee.dto';
+import { CoffeeDTO } from '../../coffee/dto/coffee.dto';
 
 class FarmDTO implements FarmEntity {
   coffeeGrowerId: string;

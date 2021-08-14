@@ -71,8 +71,8 @@ export class FarmService {
         .createQueryBuilder()
         .delete()
         .from(FarmEntity)
-        .where('coffeeGrowerId = :id', { id: auth })
-        .andWhereInIds(id)
+        .andWhere('coffeeGrowerId = :auth', { auth: auth })
+        .andWhere('id = :id', { id: id })
         .execute();
     } catch (error) {
       this.logger.error(error.message);

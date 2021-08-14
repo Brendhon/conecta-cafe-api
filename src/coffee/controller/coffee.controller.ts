@@ -84,7 +84,7 @@ export class CoffeeController {
   @Put(':id')
   @ApiParam({
     name: 'id',
-    description: 'Farm id',
+    description: 'coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
   @ApiHeader({
@@ -111,15 +111,25 @@ export class CoffeeController {
   @Delete(':id')
   @ApiParam({
     name: 'id',
-    description: 'Coffee grower id',
+    description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  })
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Authorization token',
   })
   @ApiOkResponse({ description: 'Removed with success' })
   @ApiNotFoundResponse({ description: 'Coffee not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(@Param() params: ParamsDTO) {
-    this.resp = await this.coffeeService.remove(params.id);
-    if (!this.resp.affected) throw new NotFoundException();
+  async remove(
+    @Param() params: ParamsDTO,
+    @RequestHeader(HeaderDTO) headers: HeaderDTO,
+  ) {
+    this.resp = await this.coffeeService.remove(
+      params.id,
+      headers.authorization,
+    );
+    if (!this.resp) throw new ForbiddenException();
     return ResponseFactory({ message: 'Deleted with success' });
   }
 }

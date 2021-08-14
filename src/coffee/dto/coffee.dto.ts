@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
-import { FarmDTO } from 'src/farm/dto/farm.dto';
+import { FarmDTO } from '../../farm/dto/farm.dto';
 import { CoffeeEntity } from '../model/coffee.entity';
 import { SpecialCoffeeDTO } from './special.dto';
 
