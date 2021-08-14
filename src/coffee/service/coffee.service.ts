@@ -1,5 +1,9 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
+import { FarmDTO } from 'src/farm/dto/farm.dto';
+import { FarmEntity } from 'src/farm/model/farm.entity';
+import { FarmService } from 'src/farm/service/farm.service';
 import { DeleteResult, Repository } from 'typeorm';
 import { CoffeeEntity } from '../model/coffee.entity';
 
@@ -10,12 +14,19 @@ export class CoffeeService {
   constructor(
     @InjectRepository(CoffeeEntity)
     private repo: Repository<CoffeeEntity>,
+    private farmService: FarmService,
   ) {}
 
-  async create(coffee: CoffeeEntity, id: string): Promise<CoffeeEntity> {
+  async create(coffee: CoffeeEntity, id: string, auth: string): Promise<any> {
     try {
-      coffee.farmId = id;
-      return await this.repo.save(coffee);
+      // Buscando os dados da fazenda responsável
+      const result: FarmDTO = await this.farmService.findOne(id);
+
+      // Verificando se a cafeicultor responsável pela fazenda é o mesmo passado
+      if (result && result.coffeeGrowerId == auth) {
+        coffee.farmId = id;
+        return await this.repo.save(coffee);
+      }
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid, missing data');
@@ -38,13 +49,16 @@ export class CoffeeService {
     }
   }
 
-  async update(id: any, newData: CoffeeEntity): Promise<CoffeeEntity> {
+  async update(id: any, newData: CoffeeEntity, auth: string): Promise<any> {
     try {
-      // Pegando os dados atuais da fazenda
-      const getCoffeeFromDB = await this.repo.findOne(
-        { id: id },
-        { relations: ['special'] },
-      );
+      const getCoffeeFromDB = await this.repo
+        .createQueryBuilder('coffee')
+        .leftJoinAndSelect('coffee.special', 'special') // Relacionando os dados da tabela special com coffee
+        .innerJoin(FarmEntity, 'farm', 'coffee.farmId = farm.id')
+        .innerJoin(CoffeeGrowerEntity, 'cg', 'farm.coffeeGrowerId = cg.id') // Pegando os dados do cafeicultor para verificar se fazenda dona desse café pertence a ele
+        .andWhere('cg.id = :auth', { auth: auth }) // Verificando se o token de autorização passado pertence ao cafeicultor dono desse café
+        .andWhere('coffee.id = :id', { id: id })
+        .getOne();
 
       // Verificando se a fazenda existe
       if (getCoffeeFromDB) {

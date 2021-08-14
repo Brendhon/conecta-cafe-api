@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
 import { SpecialCoffeeEntity } from '../model/special.entity';
 import { CoffeeDTO } from './coffee.dto';
 
@@ -7,7 +6,6 @@ export class SpecialCoffeeDTO implements SpecialCoffeeEntity {
   coffee: CoffeeDTO;
   id: string;
 
-  @IsString()
   @ApiProperty({
     type: String,
     description: 'Aroma',

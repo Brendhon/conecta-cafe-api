@@ -25,7 +25,7 @@ export class CoffeeEntity extends BaseEntity {
   @OneToOne(() => SpecialCoffeeEntity, (special) => special.coffee, {
     cascade: true,
   })
-  special?: SpecialCoffeeDTO;
+  special: SpecialCoffeeDTO;
 
   @ManyToOne(() => FarmEntity, (farm) => farm.coffee, {
     onDelete: 'CASCADE',
