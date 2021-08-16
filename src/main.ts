@@ -7,7 +7,10 @@ import { HttpExceptionFilter } from './helpers/common/filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['verbose', 'log', 'error', 'warn'],
+    logger:
+      process.env.IS_PROD === 'false'
+        ? ['verbose', 'log', 'error', 'warn']
+        : ['verbose', 'error', 'warn'],
   });
 
   // Habilitando cors

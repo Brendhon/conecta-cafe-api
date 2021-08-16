@@ -52,11 +52,7 @@ export class CoffeeController {
     @Param() params: ParamsDTO,
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
-    this.resp = await this.coffeeService.create(
-      body,
-      params.id,
-      headers.authorization,
-    );
+    this.resp = await this.coffeeService.create(body, params, headers);
     if (!this.resp) throw new ForbiddenException();
     return ResponseFactory(this.resp);
   }
@@ -79,7 +75,7 @@ export class CoffeeController {
   @ApiNotFoundResponse({ description: 'Coffee not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.coffeeService.findOne(params.id);
+    this.resp = await this.coffeeService.findOne(params);
     if (!this.resp) throw new NotFoundException('Coffee not found');
     else return ResponseFactory(this.resp);
   }
@@ -103,11 +99,7 @@ export class CoffeeController {
     @Body() body: CoffeeDTO,
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
-    this.resp = await this.coffeeService.update(
-      params.id,
-      body,
-      headers.authorization,
-    );
+    this.resp = await this.coffeeService.update(params, body, headers);
     if (!this.resp) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
@@ -130,10 +122,7 @@ export class CoffeeController {
     @Param() params: ParamsDTO,
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
-    this.resp = await this.coffeeService.remove(
-      params.id,
-      headers.authorization,
-    );
+    this.resp = await this.coffeeService.remove(params, headers);
     if (!this.resp) throw new ForbiddenException();
     return ResponseFactory({ message: 'Deleted with success' });
   }

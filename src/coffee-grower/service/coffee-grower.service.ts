@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
@@ -33,10 +35,10 @@ export class CoffeeGrowerService {
     }
   }
 
-  async findOne(id: string): Promise<CoffeeGrowerEntity> {
+  async findOne(id: ParamsDTO): Promise<CoffeeGrowerEntity> {
     try {
       return await this.repo.findOne(
-        { id },
+        { id: id.id },
         { relations: ['farm', 'farm.address', 'farm.contact'] },
       );
     } catch (error) {
@@ -46,20 +48,23 @@ export class CoffeeGrowerService {
   }
 
   async update(
-    id: string,
+    auth: HeaderDTO,
     newCoffeeGrower: CoffeeGrowerEntity,
   ): Promise<UpdateResult> {
     try {
-      return await this.repo.update({ id }, newCoffeeGrower);
+      return await this.repo.update(
+        { id: auth.authorization },
+        newCoffeeGrower,
+      );
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
 
-  async remove(id: string): Promise<DeleteResult> {
+  async remove(auth: HeaderDTO): Promise<DeleteResult> {
     try {
-      return await this.repo.delete({ id });
+      return await this.repo.delete({ id: auth.authorization });
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');

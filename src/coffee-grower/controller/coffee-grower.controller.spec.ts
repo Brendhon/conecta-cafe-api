@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
 import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
-import { MockCoffeeGrower } from '../../helpers/mock/coffee-grower.mock';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
 import { CoffeeGrowerController } from './coffee-grower.controller';
+import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 
 // Realizando o mock do serviço
 jest.mock('../service/coffee-grower.service');
@@ -13,8 +14,10 @@ describe('Unity test - Coffee Grower', () => {
   let service: CoffeeGrowerService;
   let mockParams: ParamsDTO;
   let mockHeaders: HeaderDTO;
-  let mockBody: any;
+  let mockBody: CoffeeGrowerEntity;
+  let mockBodyList: CoffeeGrowerEntity[];
   let mockResp: any;
+  let mockFactory: any;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,8 +27,14 @@ describe('Unity test - Coffee Grower', () => {
 
     controller = module.get<CoffeeGrowerController>(CoffeeGrowerController);
     service = module.get<CoffeeGrowerService>(CoffeeGrowerService);
-    mockParams = { id: '' };
-    mockHeaders = MockCoffeeGrower.HEADERS;
+
+    // Inicializando fabrica de objetos mocados
+    mockFactory = new MockFactory();
+
+    // Mock - Atributos
+    mockParams = mockFactory.create(ParamsDTO);
+    mockHeaders = mockFactory.create(HeaderDTO);
+    mockBody = mockFactory.create(CoffeeGrowerEntity);
   });
 
   afterEach(() => {
@@ -35,8 +44,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Create', () => {
     it('should create a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.BODY;
-      mockBody = MockCoffeeGrower.BODY;
+      mockResp = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'create').mockResolvedValue(mockResp);
@@ -53,7 +61,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Find All', () => {
     it('should list all coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_FIND_ALL;
+      mockResp = mockBodyList;
 
       // Mock - function
       jest.spyOn(service, 'findAll').mockResolvedValue(mockResp);
@@ -70,7 +78,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Find One', () => {
     it('should list a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_FIND_ONE;
+      mockResp = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'findOne').mockResolvedValue(mockResp);
@@ -105,8 +113,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Update', () => {
     it('should update a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_UPDATE;
-      mockBody = MockCoffeeGrower.BODY;
+      mockResp = MockConstants.MOCK_UPDATE_SERVICE;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
@@ -121,9 +128,8 @@ describe('Unity test - Coffee Grower', () => {
 
     it('should throw NotFoundException if coffee grower not found', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_UPDATE;
+      mockResp = MockConstants.MOCK_UPDATE_SERVICE;
       mockResp.affected = 0;
-      mockBody = MockCoffeeGrower.BODY;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
@@ -143,7 +149,7 @@ describe('Unity test - Coffee Grower', () => {
   describe('Remove', () => {
     it('should delete a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_DELETE;
+      mockResp = MockConstants.MOCK_DELETE_SERVICE;
 
       // Mock - function
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
@@ -158,7 +164,7 @@ describe('Unity test - Coffee Grower', () => {
 
     it('should throw NotFoundException if coffee grower not found', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockCoffeeGrower.SERVICE_TO_DELETE;
+      mockResp = MockConstants.MOCK_DELETE_SERVICE;
       mockResp.affected = 0;
 
       // Mock - function

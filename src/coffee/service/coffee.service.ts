@@ -6,6 +6,8 @@ import { FarmEntity } from '../../farm/model/farm.entity';
 import { FarmService } from '../../farm/service/farm.service';
 import { Repository } from 'typeorm';
 import { CoffeeEntity } from '../model/coffee.entity';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 
 @Injectable()
 export class CoffeeService {
@@ -17,14 +19,18 @@ export class CoffeeService {
     private farmService: FarmService,
   ) {}
 
-  async create(coffee: CoffeeEntity, id: string, auth: string): Promise<any> {
+  async create(
+    coffee: CoffeeEntity,
+    id: ParamsDTO,
+    auth: HeaderDTO,
+  ): Promise<any> {
     try {
       // Buscando os dados da fazenda responsável
       const result: FarmDTO = await this.farmService.findOne(id);
 
       // Verificando se a cafeicultor responsável pela fazenda é o mesmo passado
-      if (result && result.coffeeGrowerId == auth) {
-        coffee.farmId = id;
+      if (result && result.coffeeGrowerId == auth.authorization) {
+        coffee.farmId = id.id;
         return await this.repo.save(coffee);
       }
     } catch (error) {
@@ -41,23 +47,27 @@ export class CoffeeService {
     }
   }
 
-  async findOne(id: string): Promise<CoffeeEntity> {
+  async findOne(id: ParamsDTO): Promise<CoffeeEntity> {
     try {
-      return await this.repo.findOne({ id }, { relations: ['special'] });
+      return await this.repo.findOne({ id: id.id }, { relations: ['special'] });
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
     }
   }
 
-  async update(id: any, newData: CoffeeEntity, auth: string): Promise<any> {
+  async update(
+    id: ParamsDTO,
+    newData: CoffeeEntity,
+    auth: HeaderDTO,
+  ): Promise<any> {
     try {
       const getCoffeeFromDB = await this.repo
         .createQueryBuilder('coffee')
         .leftJoinAndSelect('coffee.special', 'special') // Relacionando os dados da tabela special com coffee
         .innerJoin(FarmEntity, 'farm', 'coffee.farmId = farm.id')
         .innerJoin(CoffeeGrowerEntity, 'cg', 'farm.coffeeGrowerId = cg.id') // Pegando os dados do cafeicultor para verificar se fazenda dona desse café pertence a ele
-        .andWhere('cg.id = :auth', { auth: auth }) // Verificando se o token de autorização passado pertence ao cafeicultor dono desse café
-        .andWhere('coffee.id = :id', { id: id })
+        .andWhere('cg.id = :auth', { auth: auth.authorization }) // Verificando se o token de autorização passado pertence ao cafeicultor dono desse café
+        .andWhere('coffee.id = :id', { id: id.id })
         .getOne();
 
       // Verificando se a fazenda existe
@@ -71,15 +81,15 @@ export class CoffeeService {
     }
   }
 
-  async remove(id: string, auth: string): Promise<CoffeeEntity> {
+  async remove(id: ParamsDTO, auth: HeaderDTO): Promise<CoffeeEntity> {
     try {
       const getCoffeeFromDB = await this.repo
         .createQueryBuilder('coffee')
         .leftJoinAndSelect('coffee.special', 'special') // Relacionando os dados da tabela special com coffee
         .innerJoin(FarmEntity, 'farm', 'coffee.farmId = farm.id')
         .innerJoin(CoffeeGrowerEntity, 'cg', 'farm.coffeeGrowerId = cg.id') // Pegando os dados do cafeicultor para verificar se fazenda dona desse café pertence a ele
-        .andWhere('cg.id = :auth', { auth: auth }) // Verificando se o token de autorização passado pertence ao cafeicultor dono desse café
-        .andWhere('coffee.id = :id', { id: id })
+        .andWhere('cg.id = :auth', { auth: auth.authorization }) // Verificando se o token de autorização passado pertence ao cafeicultor dono desse café
+        .andWhere('coffee.id = :id', { id: id.id })
         .getOne();
 
       if (getCoffeeFromDB) {

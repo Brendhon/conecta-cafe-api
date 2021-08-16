@@ -60,7 +60,7 @@ export class CoffeeGrowerController {
   @ApiNotFoundResponse({ description: 'Not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.service.findOne(params.id);
+    this.resp = await this.service.findOne(params);
     if (!this.resp) throw new NotFoundException();
     else return ResponseFactory(this.resp);
   }
@@ -78,7 +78,7 @@ export class CoffeeGrowerController {
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
     @Body() body: CoffeeGrowerDTO,
   ) {
-    this.resp = await this.service.update(headers.authorization, body);
+    this.resp = await this.service.update(headers, body);
     if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
@@ -93,7 +93,7 @@ export class CoffeeGrowerController {
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async remove(@RequestHeader(HeaderDTO) headers: HeaderDTO) {
-    this.resp = await this.service.remove(headers.authorization);
+    this.resp = await this.service.remove(headers);
     if (!this.resp.affected) throw new ForbiddenException();
     return ResponseFactory({ message: 'Deleted with success' });
   }

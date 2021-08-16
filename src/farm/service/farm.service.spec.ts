@@ -1,22 +1,28 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   MockType,
-  repositoryMockFactory,
+  farmRepositoryMockFactory,
 } from '../../helpers/mock/repository.mock';
 import { Repository } from 'typeorm';
 import { FarmEntity } from '../model/farm.entity';
 import { FarmService } from './farm.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockFarm } from '../../helpers/mock/farm.mock';
+import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
+import { ParamsDTO } from '../../helpers/common/dto/params.dto';
+import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
+import { CoffeeEntity } from '../../coffee/model/coffee.entity';
 
 describe('FarmService', () => {
   let service: FarmService;
   let module: TestingModule;
   let repository: MockType<Repository<FarmEntity>>;
-  let mockParams: string;
+  let mockParams: ParamsDTO;
   let mockHeaders: any;
-  let mockBody: any;
+  let mockBody: FarmEntity;
+  let mockBodyList: FarmEntity[];
   let mockResp: any;
+  let mockFactory: any;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -24,17 +30,24 @@ describe('FarmService', () => {
         FarmService,
         {
           provide: getRepositoryToken(FarmEntity),
-          useFactory: repositoryMockFactory,
-        },
-        {
-          provide: getRepositoryToken(FarmEntity),
-          useFactory: repositoryMockFactory,
+          useFactory: farmRepositoryMockFactory,
         },
       ],
     }).compile();
 
+    // Desabilitando logs
+    module.useLogger(false);
+
     service = module.get<FarmService>(FarmService);
     repository = module.get(getRepositoryToken(FarmEntity));
+
+    // Inicializando fabrica de objetos mocados
+    mockFactory = new MockFactory();
+
+    // Mock - Atributos
+    mockParams = mockFactory.create(ParamsDTO);
+    mockHeaders = mockFactory.create(HeaderDTO);
+    mockBody = mockFactory.create(CoffeeEntity);
   });
 
   afterAll(() => {
@@ -44,8 +57,7 @@ describe('FarmService', () => {
   describe('Create', () => {
     it('should create a farm', async () => {
       // Mock - Atributos
-      mockResp = MockFarm.BODY;
-      mockBody = MockFarm.BODY;
+      mockResp = mockBody;
 
       // Mock - Repositório
       repository.save.mockReturnValue(mockResp);
@@ -75,7 +87,7 @@ describe('FarmService', () => {
   describe('Find One', () => {
     it('should return a farm', async () => {
       // Mock - Atributos
-      mockResp = MockFarm.BODY;
+      mockResp = mockBody;
 
       // Mock - Repositório
       repository.findOne.mockReturnValue(mockResp);
@@ -105,7 +117,7 @@ describe('FarmService', () => {
   describe('Find All', () => {
     it('should return all farms', async () => {
       // Mock - Atributos
-      mockResp = MockFarm.SERVICE_TO_FIND_ALL;
+      mockResp = mockBodyList;
 
       // Mock - Repositório
       repository.find.mockReturnValue(mockResp);
@@ -135,11 +147,10 @@ describe('FarmService', () => {
   describe('Update', () => {
     it('should updated a farm', async () => {
       // Mock - Atributos
-      mockBody = MockFarm.BODY;
-      mockResp = MockFarm.BODY;
+      mockResp = mockBody;
 
       // Mock - Repositório
-      repository.findOne.mockReturnValue(MockFarm.SERVICE_TO_FIND_ONE);
+      repository.findOne.mockReturnValue(mockBody);
       repository.save.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
@@ -169,8 +180,7 @@ describe('FarmService', () => {
   describe('Delete', () => {
     it('should updated a farm', async () => {
       // Mock - Atributos
-      mockBody = MockFarm.BODY;
-      mockResp = MockFarm.SERVICE_TO_DELETE;
+      mockResp = MockConstants.MOCK_DELETE_SERVICE;
 
       // Check - Se o resultado do serviço é o esperado
       const resp = await service.remove(mockParams, mockHeaders);

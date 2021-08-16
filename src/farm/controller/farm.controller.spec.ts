@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FarmController } from './farm.controller';
 import { FarmService } from '../service/farm.service';
 import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { MockFarm } from '../../helpers/mock/farm.mock';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
+import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
+import { FarmEntity } from '../model/farm.entity';
 
 // Realizando o mock do serviço
 jest.mock('../service/farm.service');
@@ -14,7 +15,9 @@ describe('FarmController', () => {
   let mockParams: ParamsDTO;
   let mockHeaders: HeaderDTO;
   let mockBody: any;
+  let mockBodyList: FarmEntity[];
   let mockResp: any;
+  let mockFactory: any;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,7 +27,15 @@ describe('FarmController', () => {
 
     controller = module.get<FarmController>(FarmController);
     service = module.get<FarmService>(FarmService);
-    mockParams = { id: '' };
+
+    // Inicializando fabrica de objetos mocados
+    mockFactory = new MockFactory();
+
+    // Mock - Atributos
+    mockParams = mockFactory.create(ParamsDTO);
+    mockHeaders = mockFactory.create(HeaderDTO);
+    mockBody = mockFactory.create(FarmEntity);
+    mockBodyList = [];
   });
 
   afterEach(() => {
@@ -34,9 +45,7 @@ describe('FarmController', () => {
   describe('Create', () => {
     it('should create a farm', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.BODY;
-      mockBody = MockFarm.BODY;
-      mockHeaders = MockFarm.HEADERS;
+      mockResp = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'create').mockResolvedValue(mockResp);
@@ -53,7 +62,7 @@ describe('FarmController', () => {
   describe('Find All', () => {
     it('should list all farm', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_FIND_ALL;
+      mockResp = mockBodyList;
 
       // Mock - function
       jest.spyOn(service, 'findAll').mockResolvedValue(mockResp);
@@ -69,7 +78,7 @@ describe('FarmController', () => {
   describe('Find One', () => {
     it('should list a farm', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_FIND_ONE;
+      mockResp = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'findOne').mockResolvedValue(mockResp);
@@ -89,7 +98,7 @@ describe('FarmController', () => {
       // Mock - function
       jest.spyOn(service, 'findOne').mockResolvedValue(mockResp);
 
-      // check - Se o controller lançou um erro de 'Not found'
+      // check - Se o controller lançou um erro
       await controller
         .findOne(mockParams)
         .then((resp) => {
@@ -104,8 +113,8 @@ describe('FarmController', () => {
   describe('Update', () => {
     it('should update a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_UPDATE;
-      mockBody = MockFarm.BODY;
+      mockResp = MockConstants.MOCK_UPDATE_SERVICE;
+      mockBody = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
@@ -123,12 +132,12 @@ describe('FarmController', () => {
     it('should throw ForbiddenException', async () => {
       // Mock - Param, body, query and response
       mockResp = undefined;
-      mockBody = MockFarm.BODY;
+      mockBody = mockBody;
 
       // Mock - function
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
 
-      // check - Se o controller lançou um erro de 'Not found'
+      // check - Se o controller lançou um erro
       await controller
         .update(mockHeaders, mockParams, mockBody)
         .then((resp) => {
@@ -143,7 +152,7 @@ describe('FarmController', () => {
   describe('Remove', () => {
     it('should delete a coffee grower', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_DELETE;
+      mockResp = MockConstants.MOCK_DELETE_SERVICE;
 
       // Mock - function
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
@@ -158,13 +167,13 @@ describe('FarmController', () => {
 
     it('should throw ForbiddenException', async () => {
       // Mock - Param, body, query and response
-      mockResp = MockFarm.SERVICE_TO_DELETE;
+      mockResp = MockConstants.MOCK_DELETE_SERVICE;
       mockResp.affected = 0;
 
       // Mock - function
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
 
-      // check - Se o controller lançou um erro de 'Not found'
+      // check - Se o controller lançou um erro
       await controller
         .remove(mockHeaders, mockParams)
         .then((resp) => {

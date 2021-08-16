@@ -84,7 +84,7 @@ Execute a aplicação em modo de desenvolvimento
 ```bash
 npm run start:dev
 ```
-O servidor iniciará em [localhost:3000](http://localhost:3000).
+O servidor iniciará em [localhost:3333](http://localhost:3333).
 
 ### 🤖 Rodando os testes automatizados
 

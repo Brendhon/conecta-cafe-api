@@ -45,7 +45,7 @@ export class FarmController {
     @Body() body: FarmDTO,
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
   ) {
-    this.resp = await this.service.create(body, headers.authorization);
+    this.resp = await this.service.create(body, headers);
     return ResponseFactory(this.resp);
   }
 
@@ -67,7 +67,7 @@ export class FarmController {
   @ApiNotFoundResponse({ description: 'Farm not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.service.findOne(params.id);
+    this.resp = await this.service.findOne(params);
     if (!this.resp) throw new NotFoundException();
     else return ResponseFactory(this.resp);
   }
@@ -91,11 +91,7 @@ export class FarmController {
     @Param() params: ParamsDTO,
     @Body() body: FarmDTO,
   ) {
-    this.resp = await this.service.update(
-      params.id,
-      body,
-      headers.authorization,
-    );
+    this.resp = await this.service.update(params, body, headers);
     if (!this.resp) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
@@ -118,7 +114,7 @@ export class FarmController {
     @RequestHeader(HeaderDTO) headers: HeaderDTO,
     @Param() params: ParamsDTO,
   ) {
-    this.resp = await this.service.remove(params.id, headers.authorization);
+    this.resp = await this.service.remove(params, headers);
     if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Deleted with success' });
   }
