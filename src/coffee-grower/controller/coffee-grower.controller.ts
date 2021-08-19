@@ -5,9 +5,10 @@ import {
   ForbiddenException,
   Get,
   NotFoundException,
-  Param,
   Post,
   Put,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -16,16 +17,18 @@ import {
   ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
-import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import ResponseFactory from '../../helpers/factory/response-factory';
 
-import { CoffeeGrowerDTO } from '../dto/coffee-grower.dto';
+import {
+  CoffeeGrowerDTO,
+  CoffeeGrowerUpdateDTO,
+} from '../dto/coffee-grower.dto';
 import { CoffeeGrowerService } from '../service/coffee-grower.service';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Coffee grower')
 @Controller('coffee-grower')
@@ -42,7 +45,7 @@ export class CoffeeGrowerController {
     return ResponseFactory(this.resp);
   }
 
-  @Get()
+  @Get('all')
   @ApiOkResponse({ description: 'Return all coffee grower' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {
@@ -50,35 +53,34 @@ export class CoffeeGrowerController {
     return ResponseFactory(this.resp);
   }
 
-  @Get(':id')
-  @ApiParam({
-    name: 'id',
-    description: 'Coffee grower id',
-    example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Not found' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async findOne(@Param() params: ParamsDTO) {
-    this.resp = await this.service.findOne(params);
+  async findOne(@Request() req) {
+    this.resp = await this.service.findOne(req.user.id);
     if (!this.resp) throw new NotFoundException();
     else return ResponseFactory(this.resp);
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard)
   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiOkResponse({ description: 'Updated with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async update(
-    @RequestHeader(HeaderDTO) headers: HeaderDTO,
-    @Body() body: CoffeeGrowerDTO,
-  ) {
-    this.resp = await this.service.update(headers, body);
+  async update(@Request() req, @Body() body: CoffeeGrowerUpdateDTO) {
+    this.resp = await this.service.update(req.user.id, body);
     if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
@@ -86,7 +88,7 @@ export class CoffeeGrowerController {
   @Delete()
   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiOkResponse({ description: 'Removed with success' })

@@ -11,6 +11,7 @@ import { CoffeeGrowerModule } from './coffee-grower/coffee-grower.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './helpers/config/config.service';
 import { CoffeeModule } from './coffee/coffee.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CoffeeModule } from './coffee/coffee.module';
     CoffeeGrowerModule,
     FarmModule,
     CoffeeModule,
+    AuthModule,
   ],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {

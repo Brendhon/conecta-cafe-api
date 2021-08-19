@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
+import passport from 'passport';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './helpers/common/filters/exception.filter';
 

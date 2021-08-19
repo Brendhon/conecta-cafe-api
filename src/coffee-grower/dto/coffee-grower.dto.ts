@@ -34,4 +34,26 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   farm: FarmDTO[];
 }
 
-export { CoffeeGrowerDTO };
+class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'Coffee grower name',
+    example: 'Moises',
+    required: true,
+  })
+  name: string;
+
+  @IsEmail()
+  @ApiProperty({
+    type: String,
+    description: 'Coffee grower email',
+    example: 'moises@teste.com.br',
+    required: true,
+  })
+  email: string;
+
+  password: string;
+}
+
+export { CoffeeGrowerDTO, CoffeeGrowerUpdateDTO };

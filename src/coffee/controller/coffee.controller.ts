@@ -39,9 +39,9 @@ export class CoffeeController {
     description: 'Farm id',
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiCreatedResponse({ description: 'Created with success' })
@@ -86,9 +86,9 @@ export class CoffeeController {
     description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiOkResponse({ description: 'Updated with success' })
@@ -110,9 +110,9 @@ export class CoffeeController {
     description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiOkResponse({ description: 'Removed with success' })

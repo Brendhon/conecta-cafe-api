@@ -34,9 +34,9 @@ export class FarmController {
   constructor(private service: FarmService) {}
 
   @Post()
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiCreatedResponse({ description: 'Created with success' })
@@ -73,9 +73,9 @@ export class FarmController {
   }
 
   @Put(':id')
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiParam({
@@ -97,9 +97,9 @@ export class FarmController {
   }
 
   @Delete(':id')
-  @ApiHeader({
+   @ApiHeader({
     name: 'Authorization',
-    description: 'Authorization token',
+    description: 'Bearer token',
     required: true,
   })
   @ApiParam({

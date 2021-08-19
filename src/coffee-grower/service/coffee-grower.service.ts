@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
+import { CoffeeGrowerUpdateDTO } from '../dto/coffee-grower.dto';
 
 @Injectable()
 export class CoffeeGrowerService {
@@ -16,7 +17,9 @@ export class CoffeeGrowerService {
 
   async create(coffeeGrower: CoffeeGrowerEntity): Promise<CoffeeGrowerEntity> {
     try {
-      return await this.repo.save(coffeeGrower);
+      const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
+      const resp = await this.repo.save({ ...coffeeGrower, password: hash });
+      return { ...resp, password: null };
     } catch (error) {
       throw new BadRequestException(
         'Invalid, missing data or Coffee Grower already exist',
@@ -27,7 +30,7 @@ export class CoffeeGrowerService {
   async findAll(): Promise<CoffeeGrowerEntity[]> {
     try {
       return await this.repo.find({
-        relations: ['farm', 'farm.address', 'farm.contact'],
+        select: ['email', 'id', 'name'],
       });
     } catch (error) {
       this.logger.error(error.message);
@@ -35,10 +38,25 @@ export class CoffeeGrowerService {
     }
   }
 
-  async findOne(id: ParamsDTO): Promise<CoffeeGrowerEntity> {
+  async findOne(id: string): Promise<CoffeeGrowerEntity> {
     try {
       return await this.repo.findOne(
-        { id: id.id },
+        { id: id },
+        {
+          relations: ['farm', 'farm.address', 'farm.contact'],
+          select: ['farm', 'email', 'id', 'name'],
+        },
+      );
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new BadRequestException('Invalid or missing data');
+    }
+  }
+
+  async findByEmail(email: string): Promise<CoffeeGrowerEntity> {
+    try {
+      return await this.repo.findOne(
+        { email },
         { relations: ['farm', 'farm.address', 'farm.contact'] },
       );
     } catch (error) {
@@ -48,14 +66,13 @@ export class CoffeeGrowerService {
   }
 
   async update(
-    auth: HeaderDTO,
-    newCoffeeGrower: CoffeeGrowerEntity,
+    auth: any,
+    newCoffeeGrower: CoffeeGrowerUpdateDTO,
   ): Promise<UpdateResult> {
     try {
-      return await this.repo.update(
-        { id: auth.authorization },
-        newCoffeeGrower,
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...rest } = newCoffeeGrower; // Ignorando senha para não atualiza-lá no banco
+      return await this.repo.update({ id: auth }, rest);
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
