@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 import { FarmDTO } from '../../farm/dto/farm.dto';
 
@@ -35,6 +35,7 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
 }
 
 class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
+  @IsOptional()
   @IsString()
   @ApiProperty({
     type: String,
@@ -44,6 +45,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
   })
   name: string;
 
+  @IsOptional()
   @IsEmail()
   @ApiProperty({
     type: String,
