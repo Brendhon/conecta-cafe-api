@@ -8,15 +8,12 @@ import {
 } from '../../helpers/mock/repository.mock';
 import { CoffeeGrowerEntity } from '../model/coffee-grower.entity';
 import { CoffeeGrowerService } from './coffee-grower.service';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 
 describe('CoffeeGrowerService', () => {
   let service: CoffeeGrowerService;
   let module: TestingModule;
   let repository: MockType<Repository<CoffeeGrowerEntity>>;
-  let mockParams: ParamsDTO;
-  let mockHeaders: HeaderDTO;
+  let id: string;
   let mockBody: CoffeeGrowerEntity;
   let mockBodyList: CoffeeGrowerEntity[];
   let mockResp: any;
@@ -43,8 +40,6 @@ describe('CoffeeGrowerService', () => {
     mockFactory = new MockFactory();
 
     // Mock - Atributos
-    mockParams = mockFactory.create(ParamsDTO);
-    mockHeaders = mockFactory.create(HeaderDTO);
     mockBody = mockFactory.create(CoffeeGrowerEntity);
     mockBodyList = [];
   });
@@ -56,13 +51,15 @@ describe('CoffeeGrowerService', () => {
   describe('Create', () => {
     it('should create a coffee grower ', async () => {
       // Mock - Atributos
-      mockResp = mockBody;
+      mockResp = { ...mockBody, password: null };
 
       // Mock - Repositório
       repository.save.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
-      expect(await service.create(mockBody)).toEqual(mockResp);
+      expect(await service.create({ ...mockBody, password: 'quaksm' })).toEqual(
+        mockResp,
+      );
     });
 
     it('should throw BadRequestException', async () => {
@@ -83,8 +80,8 @@ describe('CoffeeGrowerService', () => {
     });
   });
 
-  describe('Find One', () => {
-    it('should return a coffee grower ', async () => {
+  describe('Find all coffees belonging to a farm', () => {
+    it('should return all coffees belonging to a farm ', async () => {
       // Mock - Atributos
       mockResp = mockBody;
 
@@ -92,7 +89,7 @@ describe('CoffeeGrowerService', () => {
       repository.findOne.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
-      expect(await service.findOne(mockParams)).toEqual(mockResp);
+      expect(await service.findOne(id)).toEqual(mockResp);
     });
 
     it('should throw BadRequestException', async () => {
@@ -103,7 +100,7 @@ describe('CoffeeGrowerService', () => {
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .findOne(mockParams)
+        .findOne(id)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
@@ -133,7 +130,7 @@ describe('CoffeeGrowerService', () => {
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .findOne(mockParams)
+        .findOne(id)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
@@ -152,9 +149,7 @@ describe('CoffeeGrowerService', () => {
       repository.update.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
-      expect(await service.update(mockHeaders, mockBody)).toHaveProperty(
-        'affected',
-      );
+      expect(await service.update(id, mockBody)).toHaveProperty('affected');
     });
 
     it('should throw BadRequestException', async () => {
@@ -165,7 +160,7 @@ describe('CoffeeGrowerService', () => {
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .update(mockHeaders, mockBody)
+        .update(id, mockBody)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
@@ -184,7 +179,7 @@ describe('CoffeeGrowerService', () => {
       repository.delete.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
-      expect(await service.remove(mockHeaders)).toHaveProperty('affected');
+      expect(await service.remove(id)).toHaveProperty('affected');
     });
 
     it('should throw BadRequestException', async () => {
@@ -195,7 +190,7 @@ describe('CoffeeGrowerService', () => {
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .remove(mockHeaders)
+        .remove(id)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })

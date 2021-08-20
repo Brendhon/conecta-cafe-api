@@ -75,7 +75,7 @@ export class CoffeeController {
   })
   @ApiOkResponse({ description: 'Returns all coffees belonging to a farm' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async findOne(@Param() params: ParamsDTO) {
+  async find(@Param() params: ParamsDTO) {
     this.resp = await this.coffeeService.find(params);
     return ResponseFactory(this.resp);
   }

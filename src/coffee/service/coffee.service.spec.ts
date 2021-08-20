@@ -11,7 +11,6 @@ import { CoffeeService } from './coffee.service';
 import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
 import { FarmService } from '../../farm/service/farm.service';
 import { FarmEntity } from '../../farm/model/farm.entity';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { FarmDTO } from '../../farm/dto/farm.dto';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 
@@ -21,7 +20,7 @@ describe('CoffeeService', () => {
   let repository: MockType<Repository<CoffeeEntity>>;
   let repositoryFarm: MockType<Repository<FarmEntity>>;
   let mockParams: ParamsDTO;
-  let mockHeaders: HeaderDTO;
+  let mockHeaders: string;
   let mockBody: CoffeeEntity;
   let mockBodyList: CoffeeEntity[];
   let mockFarm: FarmDTO;
@@ -56,10 +55,10 @@ describe('CoffeeService', () => {
     mockFactory = new MockFactory();
 
     // Mock - Atributos
-    mockHeaders = mockFactory.create(HeaderDTO);
+    mockHeaders = '';
     mockParams = mockFactory.create(ParamsDTO);
     mockFarm = mockFactory.create(FarmEntity);
-    mockFarm.coffeeGrowerId = mockHeaders.authorization;
+    mockFarm.coffeeGrowerId = mockHeaders;
     mockBody = mockFactory.create(CoffeeEntity);
     mockBodyList = [];
   });
@@ -98,27 +97,27 @@ describe('CoffeeService', () => {
     });
   });
 
-  describe('Find One', () => {
+  describe('Find all coffees belonging to a farm', () => {
     it('should return a coffee', async () => {
       // Mock - Atributos
       mockResp = mockBody;
 
       // Mock - Repositório
-      repository.findOne.mockReturnValue(mockResp);
+      repository.find.mockReturnValue(mockResp);
 
       // Check - Se o resultado do serviço é o esperado
-      expect(await service.findOne(mockParams)).toEqual(mockResp);
+      expect(await service.find(mockParams)).toEqual(mockResp);
     });
 
     it('should throw BadRequestException', async () => {
       // Mock - Simulando um erro lançado pelo repositório
-      repository.findOne.mockImplementation(() => {
+      repository.find.mockImplementation(() => {
         throw new Error();
       });
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .findOne(mockParams)
+        .find(mockParams)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
@@ -148,7 +147,7 @@ describe('CoffeeService', () => {
 
       // check - Se o service lançou um erro de 'Bad Request'
       await service
-        .findOne(mockParams)
+        .find(mockParams)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })

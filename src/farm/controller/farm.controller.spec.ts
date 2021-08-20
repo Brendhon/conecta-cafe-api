@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FarmController } from './farm.controller';
 import { FarmService } from '../service/farm.service';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
 import { FarmEntity } from '../model/farm.entity';
@@ -10,10 +9,10 @@ import { FarmEntity } from '../model/farm.entity';
 jest.mock('../service/farm.service');
 
 describe('FarmController', () => {
+  const id: any = { user: { id: '' } };
   let controller: FarmController;
   let service: FarmService;
   let mockParams: ParamsDTO;
-  let mockHeaders: HeaderDTO;
   let mockBody: any;
   let mockBodyList: FarmEntity[];
   let mockResp: any;
@@ -33,7 +32,6 @@ describe('FarmController', () => {
 
     // Mock - Atributos
     mockParams = mockFactory.create(ParamsDTO);
-    mockHeaders = mockFactory.create(HeaderDTO);
     mockBody = mockFactory.create(FarmEntity);
     mockBodyList = [];
   });
@@ -51,7 +49,7 @@ describe('FarmController', () => {
       jest.spyOn(service, 'create').mockResolvedValue(mockResp);
 
       // Check - se sucesso é verdadeiro
-      expect(await controller.create(mockBody, mockHeaders)).toMatchObject({
+      expect(await controller.create(id, mockBody)).toMatchObject({
         success: true,
         data: mockResp,
         error: {},
@@ -120,9 +118,7 @@ describe('FarmController', () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockResp);
 
       // Check - se sucesso é verdadeiro
-      expect(
-        await controller.update(mockHeaders, mockParams, mockBody),
-      ).toMatchObject({
+      expect(await controller.update(id, mockParams, mockBody)).toMatchObject({
         success: true,
         data: { message: 'Updated with success' },
         error: {},
@@ -139,7 +135,7 @@ describe('FarmController', () => {
 
       // check - Se o controller lançou um erro
       await controller
-        .update(mockHeaders, mockParams, mockBody)
+        .update(id, mockParams, mockBody)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
@@ -158,7 +154,7 @@ describe('FarmController', () => {
       jest.spyOn(service, 'remove').mockResolvedValue(mockResp);
 
       // Check - se sucesso é verdadeiro
-      expect(await controller.remove(mockHeaders, mockParams)).toMatchObject({
+      expect(await controller.remove(id, mockParams)).toMatchObject({
         success: true,
         data: { message: 'Deleted with success' },
         error: {},
@@ -175,7 +171,7 @@ describe('FarmController', () => {
 
       // check - Se o controller lançou um erro
       await controller
-        .remove(mockHeaders, mockParams)
+        .remove(id, mockParams)
         .then((resp) => {
           expect(resp).toBe(undefined);
         })
