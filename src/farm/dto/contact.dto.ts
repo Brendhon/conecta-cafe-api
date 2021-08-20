@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsPhoneNumber, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { ContactEntity } from '../model/contact.entity';
 import { FarmEntity } from '../model/farm.entity';
 
@@ -16,6 +16,17 @@ export class ContactDTO implements ContactEntity {
   })
   phone: string;
 
+  @IsOptional()
+  @IsEmail()
+  @ApiProperty({
+    type: String,
+    description: 'Farm email',
+    example: 'farm@farm.com.br',
+    required: false,
+  })
+  contact_email: string;
+
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Facebook',
@@ -23,6 +34,7 @@ export class ContactDTO implements ContactEntity {
   })
   facebook: string;
 
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'LinkedIn',
@@ -30,6 +42,7 @@ export class ContactDTO implements ContactEntity {
   })
   linkedIn: string;
 
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'WhatsApp',
@@ -37,6 +50,7 @@ export class ContactDTO implements ContactEntity {
   })
   whatsApp: string;
 
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'YouTube',
@@ -44,6 +58,7 @@ export class ContactDTO implements ContactEntity {
   })
   youTube: string;
 
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Instagram',
@@ -51,6 +66,7 @@ export class ContactDTO implements ContactEntity {
   })
   instagram: string;
 
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Twitter',

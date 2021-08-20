@@ -18,9 +18,8 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
 import ResponseFactory from '../../helpers/factory/response-factory';
 
 import {
@@ -62,6 +61,7 @@ export class CoffeeGrowerController {
   })
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Not found' })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findOne(@Request() req) {
     this.resp = await this.service.findOne(req.user.id);
@@ -78,6 +78,7 @@ export class CoffeeGrowerController {
   })
   @ApiOkResponse({ description: 'Updated with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(@Request() req, @Body() body: CoffeeGrowerUpdateDTO) {
     this.resp = await this.service.update(req.user.id, body);
@@ -86,6 +87,7 @@ export class CoffeeGrowerController {
   }
 
   @Delete()
+  @UseGuards(JwtAuthGuard)
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
@@ -93,9 +95,10 @@ export class CoffeeGrowerController {
   })
   @ApiOkResponse({ description: 'Removed with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(@RequestHeader(HeaderDTO) headers: HeaderDTO) {
-    this.resp = await this.service.remove(headers);
+  async remove(@Request() req) {
+    this.resp = await this.service.remove(req.user.id);
     if (!this.resp.affected) throw new ForbiddenException();
     return ResponseFactory({ message: 'Deleted with success' });
   }

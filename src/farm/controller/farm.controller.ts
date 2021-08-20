@@ -8,6 +8,8 @@ import {
   Param,
   Post,
   Put,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -18,13 +20,13 @@ import {
   ApiOkResponse,
   ApiParam,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { FarmService } from '../service/farm.service';
 import ResponseFactory from '../../helpers/factory/response-factory';
 import { FarmDTO } from '../dto/farm.dto';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { RequestHeader } from '../../helpers/common/validators/request-header.validator';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Farm')
 @Controller('farm')
@@ -34,23 +36,22 @@ export class FarmController {
   constructor(private service: FarmService) {}
 
   @Post()
-   @ApiHeader({
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
     required: true,
   })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async create(
-    @Body() body: FarmDTO,
-    @RequestHeader(HeaderDTO) headers: HeaderDTO,
-  ) {
-    this.resp = await this.service.create(body, headers);
+  async create(@Request() req, @Body() body: FarmDTO) {
+    this.resp = await this.service.create(body, req.user.id);
     return ResponseFactory(this.resp);
   }
 
-  @Get()
-  @ApiOkResponse({ description: 'Return all data' })
+  @Get('all')
+  @ApiOkResponse({ description: 'Return all farms' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async findAll() {
     this.resp = await this.service.findAll();
@@ -73,7 +74,8 @@ export class FarmController {
   }
 
   @Put(':id')
-   @ApiHeader({
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
     required: true,
@@ -84,20 +86,22 @@ export class FarmController {
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
   @ApiOkResponse({ description: 'Updated with success' })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async update(
-    @RequestHeader(HeaderDTO) headers: HeaderDTO,
+    @Request() req,
     @Param() params: ParamsDTO,
     @Body() body: FarmDTO,
   ) {
-    this.resp = await this.service.update(params, body, headers);
+    this.resp = await this.service.update(params, body, req.user.id);
     if (!this.resp) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Updated with success' });
   }
 
   @Delete(':id')
-   @ApiHeader({
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
     required: true,
@@ -108,13 +112,11 @@ export class FarmController {
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
   @ApiOkResponse({ description: 'Removed with success' })
+  @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
-  async remove(
-    @RequestHeader(HeaderDTO) headers: HeaderDTO,
-    @Param() params: ParamsDTO,
-  ) {
-    this.resp = await this.service.remove(params, headers);
+  async remove(@Request() req, @Param() params: ParamsDTO) {
+    this.resp = await this.service.remove(params, req.user.id);
     if (!this.resp.affected) throw new ForbiddenException();
     else return ResponseFactory({ message: 'Deleted with success' });
   }

@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { DeleteResult, Repository } from 'typeorm';
 import { FarmEntity } from '../model/farm.entity';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 
 @Injectable()
 export class FarmService {
@@ -14,9 +13,9 @@ export class FarmService {
     private repo: Repository<FarmEntity>,
   ) {}
 
-  async create(farm: FarmEntity, auth: HeaderDTO): Promise<FarmEntity> {
+  async create(farm: FarmEntity, auth: string): Promise<FarmEntity> {
     try {
-      farm.coffeeGrowerId = auth.authorization;
+      farm.coffeeGrowerId = auth;
       return await this.repo.save(farm);
     } catch (error) {
       throw new BadRequestException('Invalid or missing data');
@@ -49,12 +48,12 @@ export class FarmService {
   async update(
     id: ParamsDTO,
     newFarm: FarmEntity,
-    auth: HeaderDTO,
+    auth: string,
   ): Promise<FarmEntity> {
     try {
       // Pegando os dados atuais da fazenda
       const getFarmFromDB = await this.repo.findOne(
-        { id: id.id, coffeeGrowerId: auth.authorization },
+        { id: id.id, coffeeGrowerId: auth },
         { relations: ['address', 'contact'] },
       );
 
@@ -69,13 +68,13 @@ export class FarmService {
     }
   }
 
-  async remove(id: ParamsDTO, auth: HeaderDTO): Promise<DeleteResult> {
+  async remove(id: ParamsDTO, auth: string): Promise<DeleteResult> {
     try {
       return await this.repo
         .createQueryBuilder()
         .delete()
         .from(FarmEntity)
-        .andWhere('coffeeGrowerId = :auth', { auth: auth.authorization })
+        .andWhere('coffeeGrowerId = :auth', { auth: auth })
         .andWhere('id = :id', { id: id.id })
         .execute();
     } catch (error) {

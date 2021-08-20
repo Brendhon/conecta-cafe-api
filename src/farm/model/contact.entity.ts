@@ -7,8 +7,11 @@ export class ContactEntity {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300 })
   phone: string;
+
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  contact_email: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   facebook: string;

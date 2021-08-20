@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -79,9 +78,9 @@ export class CoffeeGrowerService {
     }
   }
 
-  async remove(auth: HeaderDTO): Promise<DeleteResult> {
+  async remove(auth: string): Promise<DeleteResult> {
     try {
-      return await this.repo.delete({ id: auth.authorization });
+      return await this.repo.delete({ id: auth });
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
