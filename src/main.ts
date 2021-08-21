@@ -2,22 +2,21 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
-import passport from 'passport';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './helpers/common/filters/exception.filter';
+import { configService } from './helpers/config/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger:
-      process.env.IS_PROD === 'false'
-        ? ['verbose', 'log', 'error', 'warn']
-        : ['verbose', 'error', 'warn'],
+    logger: configService.isProduction()
+      ? ['verbose', 'error', 'warn']
+      : ['verbose', 'log', 'error', 'warn'],
   });
 
   // Habilitando cors
   app.enableCors();
 
-  // // Usando filtro para mudar o objeto de resposta quando existe uma exceção
+  // Usando filtro para mudar o objeto de resposta quando existe uma exceção
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Adicionando validações
@@ -37,6 +36,6 @@ async function bootstrap() {
   SwaggerModule.setup('api/doc', app, document);
 
   // Definindo portas
-  await app.listen(process.env.PORT);
+  await app.listen(configService.getPort());
 }
 bootstrap();

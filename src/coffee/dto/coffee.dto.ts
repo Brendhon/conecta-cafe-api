@@ -59,6 +59,6 @@ export class CoffeeDTO implements CoffeeEntity {
   @IsObject()
   @ValidateNested()
   @Type(() => SpecialCoffeeDTO)
-  @ApiProperty({ type: SpecialCoffeeDTO })
+  @ApiProperty({ type: SpecialCoffeeDTO, required: false })
   special: SpecialCoffeeDTO;
 }

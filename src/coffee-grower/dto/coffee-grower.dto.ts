@@ -41,7 +41,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
     type: String,
     description: 'Coffee grower name',
     example: 'Moises',
-    required: true,
+    required: false,
   })
   name: string;
 
@@ -51,7 +51,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
     type: String,
     description: 'Coffee grower email',
     example: 'moises@teste.com.br',
-    required: true,
+    required: false,
   })
   email: string;
 

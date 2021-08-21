@@ -17,10 +17,10 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     ConfigModule.forRoot(),
+    AuthModule,
     CoffeeGrowerModule,
     FarmModule,
     CoffeeModule,
-    AuthModule,
   ],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {

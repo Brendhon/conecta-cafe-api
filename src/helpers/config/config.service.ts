@@ -20,12 +20,16 @@ class ConfigService {
     return this;
   }
 
-  public getPort() {
-    return this.getValue('PORT', true);
+  public getPort(): number {
+    return +this.getValue('PORT', true);
   }
 
-  public isProduction() {
-    return this.getValue('IS_PROD', false);
+  public getJwtToken(): string {
+    return this.getValue('JWT_SECRET', true);
+  }
+
+  public isProduction(): boolean {
+    return this.getValue('IS_PROD', false) === 'true';
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
