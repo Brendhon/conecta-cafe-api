@@ -92,6 +92,13 @@ O servidor iniciará em [localhost:3333](http://localhost:3333).
 npm run test
 ```
 
+É possível visualizar a cobertura de código:
+
+```bash
+npm run test:cov
+```
+Com esse comando sera gerado uma pagina _html_ contendo a cobertura dos testes.
+
 ---
 
 ## 👥 Autores
