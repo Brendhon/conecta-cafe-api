@@ -40,7 +40,7 @@ export class CoffeeGrowerService {
   async findOne(id: string): Promise<CoffeeGrowerEntity> {
     try {
       return await this.repo.findOne(
-        { id: id },
+        { id },
         {
           relations: ['farm', 'farm.address', 'farm.contact'],
           select: ['farm', 'email', 'id', 'name'],
@@ -65,22 +65,23 @@ export class CoffeeGrowerService {
   }
 
   async update(
-    auth: any,
-    newCoffeeGrower: CoffeeGrowerUpdateDTO,
+    id: string,
+    grower: CoffeeGrowerUpdateDTO,
   ): Promise<UpdateResult> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...rest } = newCoffeeGrower; // Ignorando senha para não atualiza-lá no banco
-      return await this.repo.update({ id: auth }, rest);
+      if (grower.password) {
+        const hash = await bcrypt.hash(grower.password, 10); // Não salvar a senha em formato texto
+        return await this.repo.update({ id }, { ...grower, password: hash });
+      } else return await this.repo.update({ id }, grower);
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
     }
   }
 
-  async remove(auth: string): Promise<DeleteResult> {
+  async remove(id: string): Promise<DeleteResult> {
     try {
-      return await this.repo.delete({ id: auth });
+      return await this.repo.delete({ id });
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');

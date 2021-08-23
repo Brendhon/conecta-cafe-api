@@ -55,6 +55,14 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
   })
   email: string;
 
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'Coffee grower access password',
+    example: '12345',
+    required: false,
+  })
   password: string;
 }
 
