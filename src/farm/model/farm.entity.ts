@@ -21,8 +21,8 @@ class FarmEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   farm_name: string;
 
-  @Column({ type: 'varchar', length: 300 })
-  medias: string;
+  @Column({ type: 'varchar', length: 500, array: true, default: [] })
+  medias: string[];
 
   @Column({ type: 'varchar' })
   history: string;

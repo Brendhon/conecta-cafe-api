@@ -7,22 +7,22 @@ export class SpecialCoffeeEntity {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   aroma: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   flavor: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   completion: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   acidity: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   body: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true, default: null })
+  @Column({ type: 'varchar', length: 300, default: '' })
   sweetness: string;
 
   @OneToOne(() => CoffeeEntity, (coffee) => coffee.special, {

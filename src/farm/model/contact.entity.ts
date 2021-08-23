@@ -10,25 +10,25 @@ export class ContactEntity {
   @Column({ type: 'varchar', length: 300 })
   phone: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   contact_email: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   facebook: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   linkedIn: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   whatsApp: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   youTube: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   instagram: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, default: '' })
   twitter: string;
 
   @OneToOne(() => FarmEntity, (farm) => farm.contact, {

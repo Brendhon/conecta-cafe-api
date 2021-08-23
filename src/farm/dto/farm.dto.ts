@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { FarmEntity } from '../model/farm.entity';
 import { AddressDTO } from './address.dto';
 import { Type } from 'class-transformer';
@@ -32,12 +38,15 @@ class FarmDTO implements FarmEntity {
   @ApiProperty({ type: ContactDTO })
   contact: ContactDTO;
 
+  @IsArray()
+  @IsOptional()
   @ApiProperty({
-    type: String,
-    description: 'Farm photos',
-    required: true,
+    type: [String],
+    description: 'Farm photos and videos',
+    required: false,
+    example: ['firebasestorage.googleapis.com/s3482984v3457345s382984v3457345'],
   })
-  medias: string;
+  medias: string[];
 
   @ApiProperty({
     type: String,
