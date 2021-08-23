@@ -1,6 +1,6 @@
 <h1 align="center">Conecta Café</h1>
 
-[![Travis CI](https://app.travis-ci.com/Brendhon/conecta-cafe-api.svg?branch=main)](https://app.travis-ci.com/Brendhon/conecta-cafe-api)
+[![Travis CI](https://img.shields.io/travis/com/Brendhon/conecta-cafe-api?label=Travis%20CI&logo=Travis)](https://app.travis-ci.com/Brendhon/conecta-cafe-api)
 
 ```txt
    _____                                 _                _____            __        
