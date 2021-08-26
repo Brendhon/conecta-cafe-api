@@ -31,6 +31,7 @@ async function bootstrap() {
     .setTitle('ConectaCafé')
     .setDescription('API da aplicação ConectaCafé')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/doc', app, document);

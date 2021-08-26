@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -40,11 +40,7 @@ export class CoffeeController {
     description: 'Farm id',
     example: 'e4b9804f-3f35-472e-9d41-fb29ffc0a483',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
@@ -87,11 +83,7 @@ export class CoffeeController {
     description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiOkResponse({ description: 'Updated with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
@@ -113,11 +105,7 @@ export class CoffeeController {
     description: 'Coffee id',
     example: '653a410a-cda7-4043-8fe7-fb5426eaeb29',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiOkResponse({ description: 'Removed with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })

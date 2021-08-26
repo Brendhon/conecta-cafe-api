@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
@@ -37,11 +37,7 @@ export class FarmController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'No auth token' })
   @ApiCreatedResponse({ description: 'Created with success' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
@@ -75,11 +71,7 @@ export class FarmController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     description: 'Farm id',
@@ -101,11 +93,7 @@ export class FarmController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     description: 'Farm id',

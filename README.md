@@ -62,6 +62,8 @@ Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, 
   npm run create:db
   ```
 
+Obs: Para utilizar esse comando é necessário que ele seja executado em um **Shell terminal**, ou seja, utilize terminais como _git bash_ e _PowerShell_ para que seja possível executar o comando `sh`.
+
 3. Instale as dependências
 ```bash
 npm install
@@ -78,6 +80,7 @@ Observações:
   ```bash
   npm run start:db
   ```
+* O mesmo que foi dito sobre o comando `npm run create:db` vale para os dois comandos acima.
 
 ### ⚽ Rodando o servidor
 

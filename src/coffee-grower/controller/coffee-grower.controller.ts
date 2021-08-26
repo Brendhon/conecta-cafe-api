@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
@@ -54,11 +54,7 @@ export class CoffeeGrowerController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Return a specific coffee grower' })
   @ApiNotFoundResponse({ description: 'Not found' })
   @ApiUnauthorizedResponse({ description: 'No auth token' })
@@ -71,11 +67,7 @@ export class CoffeeGrowerController {
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Updated with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiUnauthorizedResponse({ description: 'No auth token' })
@@ -88,11 +80,7 @@ export class CoffeeGrowerController {
 
   @Delete()
   @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Removed with success' })
   @ApiForbiddenResponse({ description: 'Not allowed' })
   @ApiUnauthorizedResponse({ description: 'No auth token' })
