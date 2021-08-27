@@ -1,7 +1,7 @@
-import { IsDefined, IsString } from 'class-validator';
+import { IsDefined, IsUUID } from 'class-validator';
 
 export class ParamsDTO {
-  @IsString()
+  @IsUUID()
   @IsDefined()
   id: string;
 }
