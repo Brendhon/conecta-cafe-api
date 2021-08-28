@@ -29,8 +29,9 @@ async function bootstrap() {
   // Swagger
   const config = new DocumentBuilder()
     .setTitle('ConectaCafé')
-    .setDescription('API da aplicação ConectaCafé')
+    .setDescription('ConectaCafé application API')
     .setVersion('1.0')
+    .setLicense('MIT License', 'https://choosealicense.com/licenses/mit/')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

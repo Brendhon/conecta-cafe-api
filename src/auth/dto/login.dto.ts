@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
-import { CoffeeGrowerEntity } from 'src/coffee-grower/model/coffee-grower.entity';
+import { CoffeeGrowerEntity } from '../../coffee-grower/model/coffee-grower.entity';
 
 class LoginDTO implements Pick<CoffeeGrowerEntity, 'email' | 'password'> {
   @IsEmail()

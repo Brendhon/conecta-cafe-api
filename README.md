@@ -1,4 +1,5 @@
 [![Travis CI](https://img.shields.io/travis/com/Brendhon/conecta-cafe-api?label=Travis%20CI&logo=Travis)](https://app.travis-ci.com/Brendhon/conecta-cafe-api)
+[![License](https://img.shields.io/apm/l/vim-mode?color=blue)](http://badges.mit-license.org)
 
 <h1 align="center">Conecta Café</h1>
 
@@ -62,7 +63,7 @@ Para evitar que seja necessário a instalação do PostgresSQL na sua máquina, 
   npm run create:db
   ```
 
-Obs: Para utilizar esse comando é necessário que ele seja executado em um **Shell terminal**, ou seja, utilize terminais como _git bash_ e _PowerShell_ para que seja possível executar o comando `sh`.
+Obs: Para utilizar esse comando é necessário que ele seja executado em um **Shell terminal**, ou seja, utilize terminais como _bash_ e _PowerShell_ para que seja possível executar o comando `sh`.
 
 3. Instale as dependências
 ```bash
@@ -110,6 +111,7 @@ Com esse comando sera gerado uma pagina _html_ contendo a cobertura dos testes.
 
 <table  style="text-align:center; border: none" >
 <tr>
+
 <td align="center"> 
 <a href="https://github.com/Brendhon" style="text-align:center;">
 <img style="border-radius: 20%;" src="https://github.com/brendhon.png" width="120px;" alt="autor"/><br> <strong> Brendhon Moreira </strong>
@@ -127,6 +129,7 @@ Com esse comando sera gerado uma pagina _html_ contendo a cobertura dos testes.
 <img style="border-radius: 20%;" src="https://github.com/MoisesSDelmoro.png" width="120px;" alt="autor"/><br><strong> Moises Delmoro </strong>
 </a>
 </td>
+
 </tr>
 </table>
 
@@ -138,6 +141,4 @@ Com esse comando sera gerado uma pagina _html_ contendo a cobertura dos testes.
 
 ---
 ## 📝 License
-[![License](https://img.shields.io/apm/l/vim-mode?color=blue)](http://badges.mit-license.org)
-
 - **[MIT license](https://choosealicense.com/licenses/mit/)**
