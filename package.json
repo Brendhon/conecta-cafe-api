@@ -20,7 +20,7 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "cross-env NODE_ENV=test jest --config ./jest-e2e.json --coverage",
+    "test:e2e": "cross-env NODE_ENV=test jest --config ./jest-e2e.json",
     "cov:unit": "cross-env NODE_ENV=test jest --coverage",
     "cov:e2e": "cross-env NODE_ENV=test jest --config ./jest-e2e.json --coverage",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
