@@ -94,16 +94,28 @@ O servidor iniciará em [localhost:3333](http://localhost:3333).
 
 ### 🤖 Rodando os testes automatizados
 
+Executar os testes unitários: 
 ```bash
 npm run test
 ```
 
-É possível visualizar a cobertura de código:
-
+Executar os testes e2e (End to end):
 ```bash
-npm run test:cov
+npm run test:e2e
 ```
-Com esse comando sera gerado uma pagina _html_ contendo a cobertura dos testes.
+
+É possível gerar uma pagina _html_ para visualizar a cobertura de código:
+
+ - Gerar cobertura dos testes unitários:
+  ```bash
+  npm run cov:unit 
+  ```
+
+  - Gerar cobertura dos testes e2e:
+
+  ```bash
+  npm run cov:e2e 
+  ```
 
 ---
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as supertest from 'supertest';
@@ -49,7 +50,7 @@ describe('AppController (e2e)', () => {
         .expect(201); // Deve retornar 201 - created
     });
 
-    it('should throw BadRequestException', async () => {
+    it('should throw BadRequestException if user already exist', async () => {
       // Salvando usuário no banco
       await repository.save({ ...coffeeGrower });
 
@@ -57,6 +58,39 @@ describe('AppController (e2e)', () => {
         .agent(app.getHttpServer())
         .post('/coffee-grower')
         .send(coffeeGrower)
+        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+    });
+
+    it('should throw BadRequestException if request body does not have email', async () => {
+      // Salvando usuário no banco
+      await repository.save({ ...coffeeGrower });
+      const { email, ...rest } = coffeeGrower;
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(rest)
+        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+    });
+
+    it('should throw BadRequestException if request body does not have password', async () => {
+      // Salvando usuário no banco
+      await repository.save({ ...coffeeGrower });
+      const { password, ...rest } = coffeeGrower;
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(rest)
+        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+    });
+
+    it('should throw BadRequestException if request body does not have name', async () => {
+      // Salvando usuário no banco
+      await repository.save({ ...coffeeGrower });
+      const { name, ...rest } = coffeeGrower;
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(rest)
         .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
     });
   });
@@ -101,6 +135,83 @@ describe('AppController (e2e)', () => {
       await supertest
         .agent(app.getHttpServer())
         .get('/coffee-grower')
+        .expect(401); // Deve retornar 401 - Sem token de autenticação
+    });
+  });
+
+  describe('PUT /coffee-grower', () => {
+    it('should update a coffee grower', async () => {
+      // Salvando as informações no banco para buscar dados
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(coffeeGrower);
+
+      // Realizando o login para pegar o token
+      const { body } = await supertest
+        .agent(app.getHttpServer())
+        .post('/auth/login')
+        .send(coffeeGrower);
+
+      await supertest
+        .agent(app.getHttpServer())
+        .put('/coffee-grower')
+        .set('Authorization', 'Bearer ' + body.data.access_token)
+        .send({ name: 'Teste' })
+        .expect(200); // Deve retornar 200 - OK
+    });
+
+    it('should throw ForbiddenException', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .put('/coffee-grower')
+        .set('Authorization', 'Bearer ' + MockConstants.INVALID_TOKEN)
+        .send({ name: 'Teste' })
+        .expect(403); // Deve retornar 403 - Ação não permitida
+    });
+
+    it('should throw UnauthorizedException if no auth token', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .put('/coffee-grower')
+        .send({ name: 'Teste' })
+        .expect(401); // Deve retornar 401 - Sem token de autenticação
+    });
+  });
+
+  describe('DELETE /coffee-grower', () => {
+    it('should delete a coffee grower', async () => {
+      // Salvando as informações no banco para buscar dados
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(coffeeGrower);
+
+      // Realizando o login para pegar o token
+      const { body } = await supertest
+        .agent(app.getHttpServer())
+        .post('/auth/login')
+        .send(coffeeGrower);
+
+      await supertest
+        .agent(app.getHttpServer())
+        .delete('/coffee-grower')
+        .set('Authorization', 'Bearer ' + body.data.access_token)
+        .expect(200); // Deve retornar 200 - OK
+    });
+
+    it('should throw ForbiddenException', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .delete('/coffee-grower')
+        .set('Authorization', 'Bearer ' + MockConstants.INVALID_TOKEN)
+        .expect(403); // Deve retornar 403 - Ação não permitida
+    });
+
+    it('should throw UnauthorizedException if no auth token', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .delete('/coffee-grower')
         .expect(401); // Deve retornar 401 - Sem token de autenticação
     });
   });
