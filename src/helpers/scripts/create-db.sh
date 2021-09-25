@@ -26,7 +26,7 @@ case $UNAME in
     (docker rm $SERVER || :) && \
     docker run --name $SERVER -e POSTGRES_PASSWORD=$PW \
     -e PGPASSWORD=$PW \
-    -p 5433:5432 \
+    -p 127.0.0.1:5433:5432 \
     -d postgres"
 
     COMMAND_DB="docker exec -i $SERVER psql -U postgres"
@@ -36,7 +36,7 @@ case $UNAME in
     (sudo docker rm $SERVER || :) && \
     sudo docker run --name $SERVER -e POSTGRES_PASSWORD=$PW \
     -e PGPASSWORD=$PW \
-    -p 5433:5432 \
+    -p 127.0.0.1:5433:5432 \
     -d postgres"
 
     COMMAND_DB="sudo docker exec -i $SERVER psql -U postgres"
