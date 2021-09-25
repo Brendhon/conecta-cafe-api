@@ -24,16 +24,7 @@ describe('Coffee Grower (e2e)', () => {
       imports: [
         AuthModule,
         CoffeeGrowerModule,
-        TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: 'localhost',
-          port: 5433,
-          username: 'postgres',
-          password: '12345',
-          database: 'conecta_cafe_db_test',
-          entities: ['src/**/*.entity{.ts,.js}'],
-          synchronize: false,
-        }),
+        TypeOrmModule.forRoot(configService.getTypeOrmConfigForTest()),
       ],
     }).compile();
 

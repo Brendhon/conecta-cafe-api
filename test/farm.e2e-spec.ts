@@ -32,16 +32,7 @@ describe('Farm (e2e)', () => {
         AuthModule,
         CoffeeGrowerModule,
         FarmModule,
-        TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: 'localhost',
-          port: 5433,
-          username: 'postgres',
-          password: '12345',
-          database: 'conecta_cafe_db_test',
-          entities: ['src/**/*.entity{.ts,.js}'],
-          synchronize: false,
-        }),
+        TypeOrmModule.forRoot(configService.getTypeOrmConfigForTest()),
       ],
     }).compile();
 
@@ -54,6 +45,7 @@ describe('Farm (e2e)', () => {
     authService = await module.get<AuthService>(AuthService);
 
     // Removendo todos os atributos que podem existir dentro da tabelas
+    await repositoryFarm.query(`DELETE FROM farm;`);
     await repositoryCoffeeGrower.query(`DELETE FROM coffee_grower;`);
   });
 
