@@ -9,11 +9,15 @@ import { Repository } from 'typeorm';
 import { CoffeeGrowerEntity } from '../src/coffee-grower/model/coffee-grower.entity';
 import { MockConstants } from '../src/helpers/mock/common.mock';
 import { AuthModule } from '../src/auth/auth.module';
+import { AuthService } from '../src/auth/service/auth.service';
+import * as bcrypt from 'bcrypt';
 
-describe('AppController (e2e)', () => {
+describe('Coffee Grower (e2e)', () => {
   let app: INestApplication;
   let repository: Repository<CoffeeGrowerEntity>;
   let coffeeGrower: any;
+  let authService: AuthService;
+  let fake_token: any;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -27,6 +31,12 @@ describe('AppController (e2e)', () => {
     app = module.createNestApplication();
     await app.init();
     repository = module.get('CoffeeGrowerEntityRepository');
+    authService = await module.get<AuthService>(AuthService);
+
+    // Pegando o token de acesso falso
+    await authService
+      .login(MockConstants.MOCK_SECOND_COFFEE_GROWER as CoffeeGrowerEntity)
+      .then((resp) => (fake_token = resp.access_token));
   });
 
   beforeEach(async () => {
@@ -104,22 +114,14 @@ describe('AppController (e2e)', () => {
     });
 
     it('should list a coffee grower', async () => {
-      // Salvando as informações no banco para buscar dados
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/coffee-grower')
-        .send(coffeeGrower);
-
-      // Realizando o login para pegar o token
-      const { body } = await supertest
-        .agent(app.getHttpServer())
-        .post('/auth/login')
-        .send(coffeeGrower);
+      const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
+      const resp = await repository.save({ ...coffeeGrower, password: hash }); // Salvando coffee grower para teste
+      const { access_token } = await authService.login(resp); // Realizando Login para pegar o token de acesso
 
       await supertest
         .agent(app.getHttpServer())
         .get('/coffee-grower')
-        .set('Authorization', 'Bearer ' + body.data.access_token)
+        .set('Authorization', 'Bearer ' + access_token)
         .expect(200); // Deve retornar 200 - OK
     });
 
@@ -127,7 +129,7 @@ describe('AppController (e2e)', () => {
       await supertest
         .agent(app.getHttpServer())
         .get('/coffee-grower')
-        .set('Authorization', 'Bearer ' + MockConstants.INVALID_TOKEN)
+        .set('Authorization', 'Bearer ' + fake_token)
         .expect(404); // Deve retornar 404 - Usuário não encontrado
     });
 
@@ -141,22 +143,14 @@ describe('AppController (e2e)', () => {
 
   describe('PUT /coffee-grower', () => {
     it('should update a coffee grower', async () => {
-      // Salvando as informações no banco para buscar dados
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/coffee-grower')
-        .send(coffeeGrower);
-
-      // Realizando o login para pegar o token
-      const { body } = await supertest
-        .agent(app.getHttpServer())
-        .post('/auth/login')
-        .send(coffeeGrower);
+      const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
+      const resp = await repository.save({ ...coffeeGrower, password: hash }); // Salvando coffee grower para teste
+      const { access_token } = await authService.login(resp); // Realizando Login para pegar o token de acesso
 
       await supertest
         .agent(app.getHttpServer())
         .put('/coffee-grower')
-        .set('Authorization', 'Bearer ' + body.data.access_token)
+        .set('Authorization', 'Bearer ' + access_token)
         .send({ name: 'Teste' })
         .expect(200); // Deve retornar 200 - OK
     });
@@ -165,7 +159,7 @@ describe('AppController (e2e)', () => {
       await supertest
         .agent(app.getHttpServer())
         .put('/coffee-grower')
-        .set('Authorization', 'Bearer ' + MockConstants.INVALID_TOKEN)
+        .set('Authorization', 'Bearer ' + fake_token)
         .send({ name: 'Teste' })
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
@@ -181,22 +175,14 @@ describe('AppController (e2e)', () => {
 
   describe('DELETE /coffee-grower', () => {
     it('should delete a coffee grower', async () => {
-      // Salvando as informações no banco para buscar dados
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/coffee-grower')
-        .send(coffeeGrower);
-
-      // Realizando o login para pegar o token
-      const { body } = await supertest
-        .agent(app.getHttpServer())
-        .post('/auth/login')
-        .send(coffeeGrower);
+      const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
+      const resp = await repository.save({ ...coffeeGrower, password: hash }); // Salvando coffee grower para teste
+      const { access_token } = await authService.login(resp); // Realizando Login para pegar o token de acesso
 
       await supertest
         .agent(app.getHttpServer())
         .delete('/coffee-grower')
-        .set('Authorization', 'Bearer ' + body.data.access_token)
+        .set('Authorization', 'Bearer ' + access_token)
         .expect(200); // Deve retornar 200 - OK
     });
 
@@ -204,7 +190,7 @@ describe('AppController (e2e)', () => {
       await supertest
         .agent(app.getHttpServer())
         .delete('/coffee-grower')
-        .set('Authorization', 'Bearer ' + MockConstants.INVALID_TOKEN)
+        .set('Authorization', 'Bearer ' + fake_token)
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
 

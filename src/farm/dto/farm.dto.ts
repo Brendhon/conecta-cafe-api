@@ -48,6 +48,7 @@ class FarmDTO implements FarmEntity {
   })
   medias: string[];
 
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     description: 'Farm history',
