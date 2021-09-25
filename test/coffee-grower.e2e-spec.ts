@@ -28,6 +28,7 @@ describe('Coffee Grower (e2e)', () => {
       ],
     }).compile();
 
+    module.useLogger(false);
     app = module.createNestApplication();
     await app.init();
     repository = module.get('CoffeeGrowerEntityRepository');
@@ -43,7 +44,7 @@ describe('Coffee Grower (e2e)', () => {
   });
 
   beforeEach(async () => {
-    coffeeGrower = MockConstants.MOCK_COFFEE_GROWER;
+    coffeeGrower = { ...MockConstants.MOCK_COFFEE_GROWER };
   });
 
   afterEach(async () => {
@@ -63,48 +64,41 @@ describe('Coffee Grower (e2e)', () => {
         .expect(201); // Deve retornar 201 - created
     });
 
-    it('should throw BadRequestException if user already exist', async () => {
-      // Salvando usuário no banco
-      await repository.save({ ...coffeeGrower });
-
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/coffee-grower')
-        .send(coffeeGrower)
-        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
-    });
-
     it('should throw BadRequestException if request body does not have email', async () => {
-      // Salvando usuário no banco
-      await repository.save({ ...coffeeGrower });
       const { email, ...rest } = coffeeGrower;
       await supertest
         .agent(app.getHttpServer())
         .post('/coffee-grower')
         .send(rest)
-        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+        .expect(400);
     });
 
     it('should throw BadRequestException if request body does not have password', async () => {
-      // Salvando usuário no banco
-      await repository.save({ ...coffeeGrower });
       const { password, ...rest } = coffeeGrower;
       await supertest
         .agent(app.getHttpServer())
         .post('/coffee-grower')
         .send(rest)
-        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+        .expect(400);
     });
 
     it('should throw BadRequestException if request body does not have name', async () => {
-      // Salvando usuário no banco
-      await repository.save({ ...coffeeGrower });
       const { name, ...rest } = coffeeGrower;
       await supertest
         .agent(app.getHttpServer())
         .post('/coffee-grower')
         .send(rest)
-        .expect(400); // Deve lançar o bad request pois usuário ja esta no banco
+        .expect(400);
+    });
+
+    it('should throw ConflictException if Coffee Grower already exist', async () => {
+      // Salvando usuário no banco
+      await repository.save({ ...coffeeGrower });
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/coffee-grower')
+        .send(coffeeGrower)
+        .expect(409); // Deve lançar o Conflict pois usuário ja esta no banco
     });
   });
 

@@ -1,5 +1,6 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
   ForbiddenException,
@@ -13,6 +14,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -38,10 +40,12 @@ export class CoffeeGrowerController {
 
   @Post()
   @ApiCreatedResponse({ description: 'Create with success' })
+  @ApiConflictResponse({ description: 'Coffee Grower already exist' })
   @ApiBadRequestResponse({ description: 'Invalid or missing data' })
   async create(@Body() body: CoffeeGrowerDTO) {
     this.resp = await this.service.create(body);
-    return ResponseFactory(this.resp);
+    if (!this.resp) throw new ConflictException('Coffee Grower already exist');
+    else return ResponseFactory(this.resp);
   }
 
   @Get('all')
@@ -88,6 +92,6 @@ export class CoffeeGrowerController {
   async remove(@Request() req) {
     this.resp = await this.service.remove(req.user.id);
     if (!this.resp.affected) throw new ForbiddenException();
-    return ResponseFactory({ message: 'Deleted with success' });
+    else return ResponseFactory({ message: 'Deleted with success' });
   }
 }

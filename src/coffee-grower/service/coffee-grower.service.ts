@@ -16,13 +16,13 @@ export class CoffeeGrowerService {
 
   async create(coffeeGrower: CoffeeGrowerEntity): Promise<CoffeeGrowerEntity> {
     try {
+      if (await this.findByEmail(coffeeGrower.email)) return;
       const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
       const resp = await this.repo.save({ ...coffeeGrower, password: hash });
       return { ...resp, password: null };
     } catch (error) {
-      throw new BadRequestException(
-        'Invalid, missing data or Coffee Grower already exist',
-      );
+      this.logger.error(error.message);
+      throw new BadRequestException('Invalid or missing data');
     }
   }
 

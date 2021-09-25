@@ -51,6 +51,24 @@ describe('Unity test - Coffee Grower', () => {
         error: {},
       });
     });
+
+    it('should throw ConflictException if Coffee Grower already exist', async () => {
+      // Mock - Param, body, query and response
+      mockResp = undefined;
+
+      // Mock - function
+      jest.spyOn(service, 'create').mockResolvedValue(mockResp);
+
+      // check - Se o controller lançou um erro de 'Not found'
+      await controller
+        .create(mockBody)
+        .then((resp) => {
+          expect(resp).toBe(undefined);
+        })
+        .catch((error) => {
+          expect(error.status).toBe(409);
+        });
+    });
   });
 
   describe('Find All', () => {

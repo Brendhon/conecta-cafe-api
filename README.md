@@ -20,6 +20,7 @@ Para documentação dos endpoints, acesse o Swagger em `api/doc`.
 ## ☕ Sobre o projeto
 
 - **[🤖 API](https://github.com/Brendhon/conecta-cafe-api)**
+- **[📟 Web](https://github.com/GabrielGSD/Conecta_Cafe_React)**
 
 API Rest do projeto **Conecta Café**, criada para o trabalho de conclusão de curso (TCC) do curso de Engenharia de computação do [Instituto Nacional de Telecomunicações (INATEL)](https://inatel.br/home/).
 
