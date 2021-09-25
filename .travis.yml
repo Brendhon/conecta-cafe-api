@@ -11,4 +11,4 @@ before_script:
     - npm run create:db
     
 script:
-    - npm run test && npm run test:e2e
+    - npm run test
