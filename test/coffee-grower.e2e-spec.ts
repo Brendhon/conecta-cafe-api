@@ -24,7 +24,16 @@ describe('Coffee Grower (e2e)', () => {
       imports: [
         AuthModule,
         CoffeeGrowerModule,
-        TypeOrmModule.forRoot(configService.getTypeOrmConfigForTest()),
+        TypeOrmModule.forRoot({
+          type: 'postgres',
+          host: 'localhost',
+          port: 5433,
+          username: 'postgres',
+          password: '12345',
+          database: 'conecta_cafe_db_test',
+          entities: ['src/**/*.entity{.ts,.js}'],
+          synchronize: false,
+        }),
       ],
     }).compile();
 
@@ -32,6 +41,9 @@ describe('Coffee Grower (e2e)', () => {
     await app.init();
     repository = module.get('CoffeeGrowerEntityRepository');
     authService = await module.get<AuthService>(AuthService);
+
+    // Removendo todos os atributos que podem existir dentro da tabelas
+    await repository.query(`DELETE FROM coffee_grower;`);
 
     // Pegando o token de acesso falso
     await authService
