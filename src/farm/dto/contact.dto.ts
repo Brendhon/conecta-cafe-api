@@ -11,7 +11,7 @@ export class ContactDTO implements ContactEntity {
   @IsPhoneNumber()
   @ApiProperty({
     type: String,
-    description: 'Contact phone',
+    description: 'Telefone de contato da fazenda',
     example: '+553534453539',
   })
   phone: string;
@@ -20,7 +20,7 @@ export class ContactDTO implements ContactEntity {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'Farm email',
+    description: 'Email de contato da fazenda',
     example: 'farm@farm.com.br',
     required: false,
   })

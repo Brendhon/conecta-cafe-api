@@ -12,6 +12,9 @@ export class AddressEntity {
   street: string;
 
   @Column({ type: 'varchar', length: 300 })
+  district: string;
+
+  @Column({ type: 'varchar', length: 300 })
   city: string;
 
   @Column({ type: 'varchar', length: 300 })

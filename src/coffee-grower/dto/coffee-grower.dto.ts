@@ -7,7 +7,7 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower name',
+    description: 'Nome do cafeicultor',
     example: 'Moises',
     required: true,
   })
@@ -16,7 +16,7 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower email',
+    description: 'Email do cafeicultor',
     example: 'moises@teste.com.br',
     required: true,
   })
@@ -25,7 +25,7 @@ class CoffeeGrowerDTO implements CoffeeGrowerEntity {
   @IsNotEmpty()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower access password',
+    description: 'Senha de acesso',
     example: '12345',
     required: true,
   })
@@ -39,7 +39,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower name',
+    description: 'Nome do cafeicultor',
     example: 'Moises',
     required: false,
   })
@@ -49,7 +49,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower email',
+    description: 'Email do cafeicultor',
     example: 'moises@teste.com.br',
     required: false,
   })
@@ -59,7 +59,7 @@ class CoffeeGrowerUpdateDTO implements Omit<CoffeeGrowerEntity, 'farm'> {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower access password',
+    description: 'Senha de acesso',
     example: '12345',
     required: false,
   })

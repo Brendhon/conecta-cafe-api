@@ -10,6 +10,9 @@ export class CoffeeEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   variety: string;
 
+  @Column({ type: 'varchar', length: 300 })
+  species: string;
+
   @Column({ type: 'integer' })
   altitude: number;
 

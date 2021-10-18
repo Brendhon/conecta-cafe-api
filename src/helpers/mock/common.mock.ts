@@ -31,6 +31,7 @@ export abstract class MockConstants {
     farm_name: 'Sitio paraíso',
     address: {
       street: 'Rua dos Pinheiros, Taguá',
+      district: 'Delcides Teles',
       city: 'Ouro Fino',
       country: 'Brasil',
       uf: 'MG',

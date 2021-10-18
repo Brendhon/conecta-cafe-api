@@ -10,7 +10,7 @@ export class AddressDTO implements AddressEntity {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Farm street',
+    description: 'Endereço',
     example: 'Rua dos Pinheiros, Taguá',
     required: true,
   })
@@ -19,7 +19,16 @@ export class AddressDTO implements AddressEntity {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Farm city',
+    description: 'Bairro da fazenda',
+    example: 'Delcides Teles',
+    required: true,
+  })
+  district: string;
+
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'Cidade',
     example: 'Ouro Fino',
     required: true,
   })
@@ -28,7 +37,7 @@ export class AddressDTO implements AddressEntity {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Farm country',
+    description: 'País',
     example: 'Brasil',
     required: true,
   })
@@ -38,7 +47,7 @@ export class AddressDTO implements AddressEntity {
   @Matches(Constants.REGEX_UF, { message: 'Should be a valid UF format' })
   @ApiProperty({
     type: String,
-    description: 'Farm uf',
+    description: 'UF',
     example: 'MG',
     required: true,
   })

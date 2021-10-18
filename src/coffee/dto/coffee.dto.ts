@@ -19,9 +19,17 @@ export class CoffeeDTO implements CoffeeEntity {
   @ApiProperty({
     type: String,
     description: 'Variedade do café',
-    example: 'Arábica',
+    example: 'Catuaí vermelho',
   })
   variety: string;
+
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'Espécie do café',
+    example: '100% Arábica',
+  })
+  species: string;
 
   @IsNumber()
   @ApiProperty({

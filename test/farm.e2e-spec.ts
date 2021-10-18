@@ -21,6 +21,8 @@ describe('Farm (e2e)', () => {
   let coffeeGrower: any;
   let coffeeGrowerId: any;
   let farm: any;
+  let address: any;
+  let contact: any;
   let authService: AuthService;
   let access_token: any;
   let fake_token: any;
@@ -52,7 +54,8 @@ describe('Farm (e2e)', () => {
   beforeEach(async () => {
     // Definindo os dados de uma fazenda
     farm = { ...MockConstants.MOCK_FARM };
-
+    address = { ...MockConstants.MOCK_FARM.address };
+    contact = { ...MockConstants.MOCK_FARM.contact };
     invalidId = MockConstants.INVALID_ID;
 
     // Criando um cafeicultor para testes
@@ -113,224 +116,169 @@ describe('Farm (e2e)', () => {
     });
 
     it('should throw BadRequestException if street not exist', async () => {
+      delete address['street'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          address: {
-            city: 'Ouro Fino',
-            country: 'Brasil',
-            uf: 'MG',
-          },
+          address: { ...address },
+        })
+        .expect(400); // Deve retornar 400 - Bad Request
+    });
+
+    it('should throw BadRequestException if district not exist', async () => {
+      delete address['district'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/farm')
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...farm,
+          address: { ...address },
         })
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
     it('should throw BadRequestException if city not exist', async () => {
+      delete address['city'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          address: {
-            street: 'Rua dos Pinheiros, Taguá',
-            country: 'Brasil',
-            uf: 'MG',
-          },
+          address: { ...address },
         })
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
     it('should throw BadRequestException if country not exist', async () => {
+      delete address['country'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          address: {
-            street: 'Rua dos Pinheiros, Taguá',
-            city: 'Ouro Fino',
-            uf: 'MG',
-          },
+          address: { ...address },
         })
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
     it('should throw BadRequestException if UF not exist', async () => {
+      delete address['uf'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          address: {
-            street: 'Rua dos Pinheiros, Taguá',
-            city: 'Ouro Fino',
-            country: 'Brasil',
-          },
+          address: { ...address },
         })
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
     it('should throw BadRequestException if phone not exist', async () => {
+      delete contact['phone'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
     it('should create a farm without contact_email', async () => {
+      delete contact['contact_email'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            facebook: 'string',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
 
     it('should create a farm without facebook', async () => {
+      delete contact['facebook'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
     it('should create a farm without linkedIn', async () => {
+      delete contact['linkedIn'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
 
     it('should create a farm without whatsApp', async () => {
+      delete contact['whatsApp'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            linkedIn: 'string',
-            youTube: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
 
     it('should create a farm without youTube', async () => {
+      delete contact['youTube'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            instagram: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
 
     it('should create a farm without instagram', async () => {
+      delete contact['instagram'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            twitter: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });
 
     it('should create a farm without twitter', async () => {
+      delete contact['twitter'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send({
           ...farm,
-          contact: {
-            phone: '+553534453539',
-            contact_email: 'farm@farm.com.br',
-            facebook: 'string',
-            linkedIn: 'string',
-            whatsApp: 'string',
-            youTube: 'string',
-            instagram: 'string',
-          },
+          contact: { ...contact },
         })
         .expect(201); // Deve retornar 201 - created
     });

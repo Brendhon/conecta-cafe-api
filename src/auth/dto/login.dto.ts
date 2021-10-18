@@ -6,7 +6,7 @@ class LoginDTO implements Pick<CoffeeGrowerEntity, 'email' | 'password'> {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower email',
+    description: 'Email do cafeicultor',
     example: 'moises@teste.com.br',
     required: true,
   })
@@ -15,7 +15,7 @@ class LoginDTO implements Pick<CoffeeGrowerEntity, 'email' | 'password'> {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'Coffee grower access password',
+    description: 'Senha de acesso',
     example: '12345',
     required: true,
   })
