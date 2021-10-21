@@ -27,16 +27,22 @@ class FarmEntity extends BaseEntity {
   @Column({ type: 'varchar' })
   history: string;
 
-  @Column({ type: 'varchar', length: 300, array: true })
-  insecticides: string[];
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  insecticides: string;
 
-  @Column({ type: 'varchar', length: 300, array: true })
-  fertilizers: string[];
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  fertilizers: string;
 
-  @OneToOne(() => AddressEntity, (address) => address.farm, { cascade: true })
+  @OneToOne(() => AddressEntity, (address) => address.farm, {
+    cascade: true,
+    nullable: true,
+  })
   address: AddressDTO;
 
-  @OneToOne(() => ContactEntity, (contact) => contact.farm, { cascade: true })
+  @OneToOne(() => ContactEntity, (contact) => contact.farm, {
+    cascade: true,
+    nullable: true,
+  })
   contact: ContactDTO;
 
   @OneToMany(() => CoffeeEntity, (coffee) => coffee.farm, { cascade: true })

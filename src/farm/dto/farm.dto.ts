@@ -26,13 +26,13 @@ class FarmDTO implements FarmEntity {
   })
   farm_name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => AddressDTO)
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested()
   @Type(() => ContactDTO)
   @ApiProperty({ type: ContactDTO })
@@ -56,22 +56,23 @@ class FarmDTO implements FarmEntity {
   })
   history: string;
 
-  @IsArray()
+  @IsOptional()
+  @IsString()
   @ApiProperty({
-    isArray: true,
-    type: [String],
+    type: String,
     description: 'Inseticidas',
-    example: ['Natural'],
+    example: 'Natural',
   })
-  insecticides: string[];
+  insecticides: string;
 
-  @IsArray()
+  @IsOptional()
+  @IsString()
   @ApiProperty({
-    type: [String],
+    type: String,
     description: 'Fertilizantes',
-    example: ['Organic'],
+    example: 'Organic',
   })
-  fertilizers: string[];
+  fertilizers: string;
 
   coffee: CoffeeDTO[];
 }

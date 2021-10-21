@@ -305,24 +305,24 @@ describe('Farm (e2e)', () => {
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
-    it('should throw BadRequestException if insecticides not exist', async () => {
+    it('should create a farm without insecticides', async () => {
       delete farm['insecticides'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send(farm)
-        .expect(400); // Deve retornar 400 - Bad Request
+        .expect(201); // Deve retornar 400 - Bad Request
     });
 
-    it('should throw BadRequestException if fertilizers not exist', async () => {
+    it('should create a farm without fertilizers', async () => {
       delete farm['fertilizers'];
       await supertest
         .agent(app.getHttpServer())
         .post('/farm')
         .set('Authorization', 'Bearer ' + access_token)
         .send(farm)
-        .expect(400); // Deve retornar 400 - Bad Request
+        .expect(201); // Deve retornar 400 - Bad Request
     });
   });
 
