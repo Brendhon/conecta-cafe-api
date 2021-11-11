@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   MockType,
@@ -11,7 +10,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockConstants, MockFactory } from '../../helpers/mock/common.mock';
 import { ParamsDTO } from '../../helpers/common/dto/params.dto';
 import { HeaderDTO } from '../../helpers/common/dto/headers.dto';
-import { CoffeeEntity } from '../../coffee/model/coffee.entity';
 
 describe('FarmService', () => {
   let service: FarmService;
@@ -47,7 +45,7 @@ describe('FarmService', () => {
     // Mock - Atributos
     mockParams = mockFactory.create(ParamsDTO);
     mockHeaders = mockFactory.create(HeaderDTO);
-    mockBody = mockFactory.create(CoffeeEntity);
+    mockBody = mockFactory.create(FarmEntity);
   });
 
   afterAll(() => {

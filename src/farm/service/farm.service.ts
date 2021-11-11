@@ -25,7 +25,8 @@ export class FarmService {
   async findAll(): Promise<FarmEntity[]> {
     try {
       return await this.repo.find({
-        relations: ['address', 'contact', 'coffee'],
+        select: ['id', 'farm_name', 'coffee', 'address'],
+        relations: ['address', 'coffee'],
       });
     } catch (error) {
       this.logger.error(error.message);
@@ -35,10 +36,31 @@ export class FarmService {
 
   async findOne(id: ParamsDTO): Promise<FarmEntity> {
     try {
-      return await this.repo.findOne(
+      // Pegando os dados atuais da fazenda
+      const farm = await this.repo.findOne(
         { id: id.id },
-        { relations: ['address', 'contact', 'coffee', 'coffee.special'] },
+        {
+          relations: [
+            'address',
+            'contact',
+            'coffee',
+            'coffee.special',
+            'coffeeGrower',
+          ],
+        },
       );
+
+      // Removendo atributos do cafeicultor
+      if (farm && farm.coffeeGrower) {
+        delete farm.coffeeGrower['password']; // Removendo a senha do usuário
+        delete farm.coffeeGrower['createDateTime']; // Removendo data de criação
+        delete farm.coffeeGrower['lastChangedDateTime']; // Removendo ultima data de alteração
+        delete farm.coffeeGrower['id']; // Removendo ID
+        delete farm.coffeeGrower['email']; // Removendo email
+      }
+
+      // Retornando a fazenda
+      return farm;
     } catch (error) {
       this.logger.error(error.message);
       throw new BadRequestException('Invalid or missing data');
