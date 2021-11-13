@@ -82,7 +82,8 @@ Observações:
   ```bash
   npm run start:db
   ```
-* O mesmo que foi dito sobre o comando `npm run create:db` vale para os dois comandos acima.
+* O mesmo que foi dito sobre o comando `npm run create:db` vale para os dois comandos acima;
+* Foi criado um arquivo `Insomnia - Conecta Café.json` contendo os testes das requisições, para adiciona-la, basta ir no **[Insomnia](https://insomnia.rest/)** e importar coleção. 
 
 ### ⚽ Rodando o servidor
 
