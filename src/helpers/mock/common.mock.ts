@@ -52,6 +52,24 @@ export abstract class MockConstants {
     insecticides: ['Natural'],
     fertilizers: ['Organic'],
   };
+
+  static readonly MOCK_COFFEE = {
+    variety: 'Catuaí vermelho',
+    species: '100% Arábica',
+    altitude: 1300,
+    process: 'Natural',
+    harvest: 2020,
+    harvestValue: 1200,
+  };
+
+  static readonly MOCK_SPECIAL_COFFEE = {
+    aroma: 'string',
+    flavor: 'string',
+    completion: 'string',
+    acidity: 'string',
+    body: 'string',
+    sweetness: 'string',
+  };
 }
 
 /**

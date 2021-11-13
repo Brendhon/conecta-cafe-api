@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as supertest from 'supertest';
@@ -13,16 +12,20 @@ import { FarmModule } from '../src/farm/farm.module';
 import { FarmEntity } from '../src/farm/model/farm.entity';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from '../src/auth/service/auth.service';
+import { CoffeeEntity } from '../src/coffee/model/coffee.entity';
+import { CoffeeModule } from '../src/coffee/coffee.module';
 
-describe('Farm (e2e)', () => {
+describe('Coffee (e2e)', () => {
   let app: INestApplication;
   let repositoryCoffeeGrower: Repository<CoffeeGrowerEntity>;
   let repositoryFarm: Repository<FarmEntity>;
+  let repositoryCoffee: Repository<CoffeeEntity>;
   let coffeeGrower: any;
   let coffeeGrowerId: any;
+  let coffee: any;
+  let special: any;
   let farm: any;
-  let address: any;
-  let contact: any;
+  let farmId: any;
   let authService: AuthService;
   let access_token: any;
   let fake_token: any;
@@ -34,6 +37,7 @@ describe('Farm (e2e)', () => {
         AuthModule,
         CoffeeGrowerModule,
         FarmModule,
+        CoffeeModule,
         TypeOrmModule.forRoot(configService.getTypeOrmConfigForTest()),
       ],
     }).compile();
@@ -45,20 +49,16 @@ describe('Farm (e2e)', () => {
     // Pegando os repositorios e serviços necessarios para os testes
     repositoryCoffeeGrower = module.get('CoffeeGrowerEntityRepository');
     repositoryFarm = module.get('FarmEntityRepository');
+    repositoryCoffee = module.get('CoffeeEntityRepository');
     authService = await module.get<AuthService>(AuthService);
 
     // Removendo todos os atributos que podem existir dentro da tabelas
+    await repositoryFarm.query(`DELETE FROM coffee;`);
     await repositoryFarm.query(`DELETE FROM farm;`);
     await repositoryCoffeeGrower.query(`DELETE FROM coffee_grower;`);
   });
 
   beforeEach(async () => {
-    // Definindo os dados de uma fazenda
-    farm = { ...MockConstants.MOCK_FARM };
-    address = { ...MockConstants.MOCK_FARM.address };
-    contact = { ...MockConstants.MOCK_FARM.contact };
-    invalidId = MockConstants.INVALID_ID;
-
     // Criando um cafeicultor para testes
     coffeeGrower = MockConstants.MOCK_COFFEE_GROWER; // Definindo os dados do cafeicultor
     const hash = await bcrypt.hash(coffeeGrower.password, 10); // Não salvar a senha em formato texto
@@ -73,6 +73,20 @@ describe('Farm (e2e)', () => {
           });
       });
 
+    // Definindo os dados de uma fazenda para testes
+    farm = { ...MockConstants.MOCK_FARM };
+    invalidId = MockConstants.INVALID_ID;
+    await repositoryFarm
+      .save({ ...farm, coffeeGrowerId }) // Salvando coffee grower para teste
+      .then(async (resp) => {
+        farmId = resp.id; // Salvando o id do cafeicultor para testes
+      });
+
+    // Definindo os dados de um cafe para testes
+    coffee = { ...MockConstants.MOCK_COFFEE };
+    special = { ...MockConstants.MOCK_SPECIAL_COFFEE };
+    coffee.special = special;
+
     // Criando um token de acesso falso
     await authService
       .login(MockConstants.MOCK_SECOND_COFFEE_GROWER as CoffeeGrowerEntity)
@@ -80,6 +94,7 @@ describe('Farm (e2e)', () => {
   });
 
   afterEach(async () => {
+    await repositoryFarm.query(`DELETE FROM coffee;`);
     await repositoryFarm.query(`DELETE FROM farm;`);
     await repositoryCoffeeGrower.query(`DELETE FROM coffee_grower;`);
   });
@@ -88,338 +103,290 @@ describe('Farm (e2e)', () => {
     await app.close();
   });
 
-  describe('POST /farm', () => {
-    it('should create a farm', async () => {
+  describe('POST /coffee', () => {
+    it('should create a coffee', async () => {
       await supertest
         .agent(app.getHttpServer())
-        .post('/farm')
+        .post(`/coffee/${farmId}`)
         .set('Authorization', 'Bearer ' + access_token)
-        .send(farm)
+        .send(coffee)
         .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should throw BadRequestException if coffee grower not exist', async () => {
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + fake_token)
-        .send(farm)
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if name is not a string', async () => {
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({ ...farm, farm_name: null })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if street not exist', async () => {
-      delete address['street'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          address: { ...address },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if district not exist', async () => {
-      delete address['district'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          address: { ...address },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if city not exist', async () => {
-      delete address['city'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          address: { ...address },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if country not exist', async () => {
-      delete address['country'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          address: { ...address },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if UF not exist', async () => {
-      delete address['uf'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          address: { ...address },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should throw BadRequestException if phone not exist', async () => {
-      delete contact['phone'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should create a farm without contact_email', async () => {
-      delete contact['contact_email'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without facebook', async () => {
-      delete contact['facebook'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-    it('should create a farm without linkedIn', async () => {
-      delete contact['linkedIn'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without whatsApp', async () => {
-      delete contact['whatsApp'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without youTube', async () => {
-      delete contact['youTube'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without instagram', async () => {
-      delete contact['instagram'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without twitter', async () => {
-      delete contact['twitter'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          contact: { ...contact },
-        })
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should create a farm without medias', async () => {
-      delete farm['medias'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send(farm)
-        .expect(201); // Deve retornar 201 - created
-    });
-
-    it('should throw BadRequestException if history is not defined', async () => {
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({
-          ...farm,
-          history: null,
-        })
-        .expect(400); // Deve retornar 400 - Bad Request
-    });
-
-    it('should create a farm without insecticides', async () => {
-      delete farm['insecticides'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send(farm)
-        .expect(201); // Deve retornar 400 - Bad Request
-    });
-
-    it('should create a farm without fertilizers', async () => {
-      delete farm['fertilizers'];
-      await supertest
-        .agent(app.getHttpServer())
-        .post('/farm')
-        .set('Authorization', 'Bearer ' + access_token)
-        .send(farm)
-        .expect(201); // Deve retornar 400 - Bad Request
-    });
-  });
-
-  describe('GET /farm', () => {
-    it('should list all farms', async () => {
-      await supertest.agent(app.getHttpServer()).get('/farm/all').expect(200); // Deve retornar 200 - OK
-    });
-
-    it('should list a farm', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
-      await supertest
-        .agent(app.getHttpServer())
-        .get(`/farm/${resp.id}`)
-        .expect(200); // Deve retornar 200 - OK
-    });
-
-    it('should throw NotFoundException', async () => {
-      await supertest
-        .agent(app.getHttpServer())
-        .get(`/farm/${invalidId}`)
-        .expect(404); // Deve retornar 404 - Usuário não encontrado
-    });
-  });
-
-  describe('PUT /farm', () => {
-    it('should update a farm', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
-      await supertest
-        .agent(app.getHttpServer())
-        .put(`/farm/${resp.id}`)
-        .set('Authorization', 'Bearer ' + access_token)
-        .send({ name: 'Teste' })
-        .expect(200); // Deve retornar 200 - OK
     });
 
     it('should throw ForbiddenException if farm id is invalid', async () => {
       await supertest
         .agent(app.getHttpServer())
-        .put(`/farm/${invalidId}`)
+        .post(`/coffee/${invalidId}`)
         .set('Authorization', 'Bearer ' + access_token)
-        .send({ name: 'Teste' })
+        .send(coffee)
+        .expect(403); // Deve retornar 403 - forbidden
+    });
+
+    it('should throw ForbiddenException if token not belong to responsible coffee grower', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + fake_token)
+        .send(coffee)
+        .expect(403); // Deve retornar 403 - forbidden
+    });
+
+    it('should throw UnauthorizedException if no auth token', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .send(coffee)
+        .expect(401); // Deve retornar 401 - unauthorized
+    });
+
+    it('should throw BadRequestException if variety not exist', async () => {
+      delete coffee['variety'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should throw BadRequestException if species not exist', async () => {
+      delete coffee['species'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should throw BadRequestException if altitude not exist', async () => {
+      delete coffee['altitude'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should throw BadRequestException if process not exist', async () => {
+      delete coffee['process'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should throw BadRequestException if harvest not exist', async () => {
+      delete coffee['harvest'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should throw BadRequestException if harvestValue not exist', async () => {
+      delete coffee['harvestValue'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(400); // Deve retornar 400 - bad request
+    });
+
+    it('should create coffee if special not exist', async () => {
+      delete coffee['special'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.aroma not exist', async () => {
+      delete special['aroma'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.flavor not exist', async () => {
+      delete special['flavor'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.completion not exist', async () => {
+      delete special['completion'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.acidity not exist', async () => {
+      delete special['acidity'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.body not exist', async () => {
+      delete special['body'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+
+    it('should create coffee if special.sweetness not exist', async () => {
+      delete special['sweetness'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post(`/coffee/${farmId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...coffee,
+          special,
+        })
+        .expect(201); // Deve retornar 201 - created
+    });
+  });
+
+  describe('GET /coffee', () => {
+    it('should list all coffees', async () => {
+      await supertest.agent(app.getHttpServer()).get('/coffee/all').expect(200); // Deve retornar 200 - OK
+    });
+
+    it('should list a coffee', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .get(`/coffee/${farmId}`)
+        .expect(200); // Deve retornar 200 - OK
+    });
+  });
+
+  describe('PUT /coffee', () => {
+    it('should update a coffee', async () => {
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando fazenda para teste
+      await supertest
+        .agent(app.getHttpServer())
+        .put(`/coffee/${resp.id}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({ variety: 'Teste' })
+        .expect(200); // Deve retornar 200 - OK
+    });
+
+    it('should throw ForbiddenException if coffee id is invalid', async () => {
+      await supertest
+        .agent(app.getHttpServer())
+        .put(`/coffee/${invalidId}`)
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({ variety: 'Teste' })
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
 
     it('should throw ForbiddenException if token not belong to responsible coffee grower', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando coffee para teste
       await supertest
         .agent(app.getHttpServer())
-        .put(`/farm/${resp.id}`)
+        .put(`/coffee/${resp.id}`)
         .set('Authorization', 'Bearer ' + fake_token)
-        .send({ name: 'Teste' })
+        .send({ variety: 'Teste' })
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
 
     it('should throw UnauthorizedException if no auth token', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando coffee para teste
       await supertest
         .agent(app.getHttpServer())
-        .put(`/farm/${resp.id}`)
-        .send({ name: 'Teste' })
+        .put(`/coffee/${resp.id}`)
+        .send({ variety: 'Teste' })
         .expect(401); // Deve retornar 401 - Sem token de autenticação
     });
   });
 
-  describe('DELETE /farm', () => {
-    it('should delete a farm', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
+  describe('DELETE /coffee', () => {
+    it('should delete a coffee', async () => {
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando coffee para teste
       await supertest
         .agent(app.getHttpServer())
-        .delete(`/farm/${resp.id}`)
+        .delete(`/coffee/${resp.id}`)
         .set('Authorization', 'Bearer ' + access_token)
         .expect(200); // Deve retornar 200 - OK
     });
 
-    it('should throw ForbiddenException if farm id is invalid', async () => {
+    it('should throw ForbiddenException if coffee id is invalid', async () => {
       await supertest
         .agent(app.getHttpServer())
-        .delete(`/farm/${invalidId}`)
+        .delete(`/coffee/${invalidId}`)
         .set('Authorization', 'Bearer ' + access_token)
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
 
     it('should throw ForbiddenException if token not belong to responsible coffee grower', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando coffee para teste
       await supertest
         .agent(app.getHttpServer())
-        .delete(`/farm/${resp.id}`)
+        .delete(`/coffee/${resp.id}`)
         .set('Authorization', 'Bearer ' + fake_token)
         .expect(403); // Deve retornar 403 - Ação não permitida
     });
 
     it('should throw UnauthorizedException if no auth token', async () => {
-      const resp = await repositoryFarm.save({ ...farm, coffeeGrowerId }); // Salvando fazenda para teste
+      const resp = await repositoryCoffee.save({ ...coffee, farmId }); // Salvando coffee para teste
       await supertest
         .agent(app.getHttpServer())
-        .delete(`/farm/${resp.id}`)
+        .delete(`/coffee/${resp.id}`)
         .expect(401); // Deve retornar 401 - Sem token de autenticação
     });
   });
