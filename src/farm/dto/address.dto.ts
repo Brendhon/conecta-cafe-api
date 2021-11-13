@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches } from 'class-validator';
+import { IsNumber, IsString, Matches } from 'class-validator';
 import { Constants } from '../../helpers/common/constants/constants';
 import { AddressEntity } from '../model/address.entity';
 import { FarmDTO } from './farm.dto';
@@ -42,6 +42,15 @@ export class AddressDTO implements AddressEntity {
     required: true,
   })
   country: string;
+
+  @IsNumber()
+  @ApiProperty({
+    type: Number,
+    description: 'Número da residência',
+    example: '50',
+    required: true,
+  })
+  address_number: string;
 
   @IsString()
   @Matches(Constants.REGEX_UF, { message: 'Should be a valid UF format' })

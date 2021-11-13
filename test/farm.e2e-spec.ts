@@ -168,6 +168,19 @@ describe('Farm (e2e)', () => {
         .expect(400); // Deve retornar 400 - Bad Request
     });
 
+    it('should throw BadRequestException if address_number not exist', async () => {
+      delete address['address_number'];
+      await supertest
+        .agent(app.getHttpServer())
+        .post('/farm')
+        .set('Authorization', 'Bearer ' + access_token)
+        .send({
+          ...farm,
+          address: { ...address },
+        })
+        .expect(400); // Deve retornar 400 - Bad Request
+    });
+
     it('should throw BadRequestException if UF not exist', async () => {
       delete address['uf'];
       await supertest

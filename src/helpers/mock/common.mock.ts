@@ -32,6 +32,7 @@ export abstract class MockConstants {
     address: {
       street: 'Rua dos Pinheiros, Taguá',
       district: 'Delcides Teles',
+      address_number: 50,
       city: 'Ouro Fino',
       country: 'Brasil',
       uf: 'MG',

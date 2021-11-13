@@ -20,6 +20,9 @@ export class AddressEntity {
   @Column({ type: 'varchar', length: 300 })
   country: string;
 
+  @Column({ type: 'integer' })
+  address_number: string;
+
   @Column({ type: 'varchar', length: 300 })
   uf: string;
 
