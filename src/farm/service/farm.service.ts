@@ -25,7 +25,7 @@ export class FarmService {
   async findAll(): Promise<FarmEntity[]> {
     try {
       return await this.repo.find({
-        select: ['id', 'farm_name', 'coffee', 'address'],
+        select: ['id', 'farm_name', 'coffee', 'address', 'medias'],
         relations: ['address', 'coffee'],
       });
     } catch (error) {
