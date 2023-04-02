@@ -1,5 +1,5 @@
 [![Travis CI](https://img.shields.io/travis/com/Brendhon/conecta-cafe-api?label=Travis%20CI&logo=Travis)](https://app.travis-ci.com/Brendhon/conecta-cafe-api)
-[![License](https://img.shields.io/apm/l/vim-mode?color=blue)](https://badges.mit-license.org/)
+[![License](https://img.shields.io/github/license/Brendhon/conecta-cafe-api)](https://badges.mit-license.org/)
 
 <h1 align="center">Conecta Café</h1>
 
